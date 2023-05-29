@@ -2,8 +2,6 @@
 
 This repository contains utility classes for GITS.
 
-This repository contains utility classes for tests in GITS.
-
 ## How to add this repository to your project
 
 In the `settings.gradle` file, add the following line:
