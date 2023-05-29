@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.is;
 /**
  * Tests for {@link SortUtil}.
  */
-public class SortUtilTest {
+class SortUtilTest {
 
     /**
      * Given no sort fields
@@ -22,7 +22,7 @@ public class SortUtilTest {
      * Then an unsorted sort object is returned
      */
     @Test
-    public void testUnsortedWhenSortFieldsEmpty() {
+    void testUnsortedWhenSortFieldsEmpty() {
         assertThat(SortUtil.createSort(null, null), equalTo(Sort.unsorted()));
         assertThat(SortUtil.createSort(List.of(), null), equalTo(Sort.unsorted()));
     }
@@ -33,7 +33,7 @@ public class SortUtilTest {
      * Then a sort object with the given sort field is returned
      */
     @Test
-    public void testSingleSortField() {
+    void testSingleSortField() {
         Sort sort = SortUtil.createSort(List.of("field"), List.of(SortDirectionDto.ASC));
 
         assertThat(sort.isSorted(), equalTo(true));
@@ -56,7 +56,7 @@ public class SortUtilTest {
      * Then a sort object with the given sort field is returned, sorted ascending
      */
     @Test
-    public void testDefaultDirectionIsAsc() {
+    void testDefaultDirectionIsAsc() {
         Sort sort = SortUtil.createSort(List.of("field"), null);
 
         Sort.Order order = requireNonNull(sort.getOrderFor("field"));
@@ -73,7 +73,7 @@ public class SortUtilTest {
      * Then a sort object with the given sort fields is returned
      */
     @Test
-    public void testMultipleSortFields() {
+    void testMultipleSortFields() {
         Sort sort = SortUtil.createSort(List.of("field1", "field2"),
                 List.of(SortDirectionDto.ASC, SortDirectionDto.DESC));
 

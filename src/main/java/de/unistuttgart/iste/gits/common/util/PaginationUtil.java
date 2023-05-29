@@ -14,6 +14,10 @@ import org.springframework.lang.Nullable;
  */
 public class PaginationUtil {
 
+    private PaginationUtil() {
+        // Utility class
+    }
+
     /**
      * Creates a {@link Pageable} matching the given {@link PaginationDto} and {@link Sort}.
      *

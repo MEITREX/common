@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
  * <p>
  * In this test, we only test null safety and the correct invocation of the criteria builder methods.
  */
-public class TestSpecificationUtil {
+class TestSpecificationUtil {
 
     private final CriteriaBuilder criteriaBuilder = spy(CriteriaBuilder.class);
     @SuppressWarnings("unchecked")
@@ -39,7 +39,7 @@ public class TestSpecificationUtil {
      * Then the default specification is returned
      */
     @Test
-    public void testNullSafety() {
+    void testNullSafety() {
         Function<Object, Specification<Object>> dummyFunction = o -> Specification.where(null);
 
         assertThat(SpecificationUtil.stringFilter("test", null),
@@ -77,7 +77,7 @@ public class TestSpecificationUtil {
      * Then the correct methods of the criteria builder are called
      */
     @Test
-    public void testStringFilter() {
+    void testStringFilter() {
         Specification<Object> specification = SpecificationUtil.stringFilter("test", StringFilterDto.builder()
                 .setContains("testContains")
                 .setEquals("testEquals")
@@ -95,7 +95,7 @@ public class TestSpecificationUtil {
      * Then the correct methods of the criteria builder are called
      */
     @Test
-    public void testDateTimeFilter() {
+    void testDateTimeFilter() {
         var after = LocalDate.of(2022, 1, 1).atStartOfDay().atOffset(ZoneOffset.UTC);
         var before = LocalDate.of(2023, 1, 1).atStartOfDay().atOffset(ZoneOffset.UTC);
         Specification<Object> specification = SpecificationUtil.dateTimeFilter("test", DateTimeFilterDto.builder()
@@ -115,7 +115,7 @@ public class TestSpecificationUtil {
      * Then the correct methods of the criteria builder are called
      */
     @Test
-    public void testBooleanFilter() {
+    void testBooleanFilter() {
         Specification<Object> specification = SpecificationUtil.booleanFilter("test", true);
 
         specification.toPredicate(root, criteriaQuery, criteriaBuilder);
@@ -129,7 +129,7 @@ public class TestSpecificationUtil {
      * Then the correct methods of the criteria builder are called
      */
     @Test
-    public void testIntFilter() {
+    void testIntFilter() {
         Specification<Object> specification = SpecificationUtil.intFilter("test",
                 IntFilterDto.builder().setEquals(1).setGreaterThan(2).setLessThan(3).build());
 

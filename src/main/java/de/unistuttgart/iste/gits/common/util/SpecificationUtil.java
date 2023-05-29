@@ -19,8 +19,16 @@ import java.util.stream.Stream;
  * <p>
  * Contains methods for creating specifications for filtering by string, boolean, integer and date time values
  * using the filter DTOs.
+ *
+ * @implNote The sonar rule S119 is disabled for this class, as the default naming convention for generic types
+ * (only a single letter allowed) is less readable than the one used here.
  */
+@SuppressWarnings("java:S119")
 public class SpecificationUtil {
+
+    private SpecificationUtil() {
+        // utility class
+    }
 
     private static final Specification<?> ALWAYS_TRUE = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
 
@@ -186,7 +194,7 @@ public class SpecificationUtil {
             return alwaysTrue();
         }
         return (root, query, criteriaBuilder) -> {
-            Expression<String> path = towLowerCasePathIfIgnoreCase(field, root, criteriaBuilder, ignoreCase);
+            Expression<String> path = toLowerCasePathIfIgnoreCase(field, root, criteriaBuilder, ignoreCase);
             return criteriaBuilder.equal(path, toLowerCaseIfIgnoreCase(value, ignoreCase));
         };
     }
@@ -206,7 +214,7 @@ public class SpecificationUtil {
             return alwaysTrue();
         }
         return (root, query, criteriaBuilder) -> {
-            Expression<String> path = towLowerCasePathIfIgnoreCase(field, root, criteriaBuilder, ignoreCase);
+            Expression<String> path = toLowerCasePathIfIgnoreCase(field, root, criteriaBuilder, ignoreCase);
 
             // use the sql wildcard character % to allow any characters before and after the value
             return criteriaBuilder.like(path, "%" + toLowerCaseIfIgnoreCase(value, ignoreCase) + "%");
@@ -263,10 +271,10 @@ public class SpecificationUtil {
         return (Specification<T>) ALWAYS_FALSE;
     }
 
-    private static Expression<String> towLowerCasePathIfIgnoreCase(String field,
-                                                                   Root<?> root,
-                                                                   CriteriaBuilder criteriaBuilder,
-                                                                   boolean ignoreCase) {
+    private static Expression<String> toLowerCasePathIfIgnoreCase(String field,
+                                                                  Root<?> root,
+                                                                  CriteriaBuilder criteriaBuilder,
+                                                                  boolean ignoreCase) {
         return ignoreCase ? criteriaBuilder.lower(root.get(field)) : root.get(field);
     }
 

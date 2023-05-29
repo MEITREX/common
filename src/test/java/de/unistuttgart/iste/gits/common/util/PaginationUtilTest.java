@@ -10,7 +10,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class PaginationUtilTest {
+class PaginationUtilTest {
 
     /**
      * Given no pagination dto
@@ -18,7 +18,7 @@ public class PaginationUtilTest {
      * Then an unpaged pageable is returned
      */
     @Test
-    public void testCreatePageableNoPaginationDto() {
+    void testCreatePageableNoPaginationDto() {
         Pageable pageable = PaginationUtil.createPageable(null, null);
 
         assertThat(pageable.isPaged(), equalTo(false));
@@ -34,7 +34,7 @@ public class PaginationUtilTest {
      * Then a pageable matching the pagination dto is returned
      */
     @Test
-    public void testCreatePageable() {
+    void testCreatePageable() {
         PaginationDto paginationDto = PaginationDto.builder()
                 .setPage(1)
                 .setSize(10)
@@ -54,7 +54,7 @@ public class PaginationUtilTest {
      * Then the correct pagination info dto is returned
      */
     @Test
-    public void testCreateUnpagedPaginationInfoDto() {
+    void testCreateUnpagedPaginationInfoDto() {
         PaginationInfoDto paginationDto = PaginationUtil.unpagedPaginationInfoDto(10);
 
         assertThat(paginationDto.getPage(), equalTo(0));
@@ -70,7 +70,7 @@ public class PaginationUtilTest {
      * Then the correct pagination info dto is returned
      */
     @Test
-    public void testCreatePaginationInfoDto() {
+    void testCreatePaginationInfoDto() {
         Page<?> page = new PageImpl<>(List.of(), PageRequest.of(0, 10), 20);
         PaginationInfoDto paginationDto = PaginationUtil.createPaginationInfoDto(page);
 

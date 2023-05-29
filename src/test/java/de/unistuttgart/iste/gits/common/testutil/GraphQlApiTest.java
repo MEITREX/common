@@ -1,4 +1,4 @@
-package de.unistuttgart.iste.gits.util;
+package de.unistuttgart.iste.gits.common.testutil;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;

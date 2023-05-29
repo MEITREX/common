@@ -12,6 +12,10 @@ import java.util.List;
  */
 public class SortUtil {
 
+    private SortUtil() {
+        // Utility class
+    }
+
     /**
      * Creates a {@link Sort} object from the given sort fields and sort directions.
      *
