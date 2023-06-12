@@ -1,8 +1,8 @@
 package de.unistuttgart.iste.gits.common.util;
 
-import de.unistuttgart.iste.gits.generated.dto.DateTimeFilterDto;
-import de.unistuttgart.iste.gits.generated.dto.IntFilterDto;
-import de.unistuttgart.iste.gits.generated.dto.StringFilterDto;
+import de.unistuttgart.iste.gits.generated.dto.DateTimeFilter;
+import de.unistuttgart.iste.gits.generated.dto.IntFilter;
+import de.unistuttgart.iste.gits.generated.dto.StringFilter;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Root;
@@ -37,57 +37,57 @@ public class SpecificationUtil {
     /**
      * Creates a specification for the given string filter.
      *
-     * @param field           the field to filter by
-     * @param stringFilterDto the string filter DTO, may be null
-     * @param <T>             generic type to allow this filter to be used with any entity type
+     * @param field        the field to filter by
+     * @param stringFilter the string filter DTO, may be null
+     * @param <T>          generic type to allow this filter to be used with any entity type
      * @return the specification for the given string filter,
      * or {@link SpecificationUtil#alwaysTrue()} if the filter is null
      */
-    public static <T> Specification<T> stringFilter(String field, @Nullable StringFilterDto stringFilterDto) {
-        if (stringFilterDto == null) {
+    public static <T> Specification<T> stringFilter(String field, @Nullable StringFilter stringFilter) {
+        if (stringFilter == null) {
             return alwaysTrue();
         }
 
         return Specification
-                .<T>where(stringEqualTo(field, stringFilterDto.getEquals(), stringFilterDto.getIgnoreCase()))
-                .and(contains(field, stringFilterDto.getContains(), stringFilterDto.getIgnoreCase()));
+                .<T>where(stringEqualTo(field, stringFilter.getEquals(), stringFilter.getIgnoreCase()))
+                .and(contains(field, stringFilter.getContains(), stringFilter.getIgnoreCase()));
     }
 
     /**
      * Creates a specification for the given date time filter.
      *
-     * @param field             the field to filter by
-     * @param dateTimeFilterDto the date time filter DTO, may be null
-     * @param <T>               generic type to allow this filter to be used with any entity type
+     * @param field          the field to filter by
+     * @param dateTimeFilter the date time filter DTO, may be null
+     * @param <T>            generic type to allow this filter to be used with any entity type
      * @return the specification for the given date time filter,
      * or {@link SpecificationUtil#alwaysTrue()} if the filter is null
      */
-    public static <T> Specification<T> dateTimeFilter(String field, @Nullable DateTimeFilterDto dateTimeFilterDto) {
-        if (dateTimeFilterDto == null) {
+    public static <T> Specification<T> dateTimeFilter(String field, @Nullable DateTimeFilter dateTimeFilter) {
+        if (dateTimeFilter == null) {
             return alwaysTrue();
         }
 
-        return Specification.<T>where(lessThan(field, dateTimeFilterDto.getBefore()))
-                .and(greaterThan(field, dateTimeFilterDto.getAfter()));
+        return Specification.<T>where(lessThan(field, dateTimeFilter.getBefore()))
+                .and(greaterThan(field, dateTimeFilter.getAfter()));
     }
 
     /**
      * Creates a specification for the given integer filter.
      *
-     * @param field        the field to filter by
-     * @param intFilterDto the integer filter DTO, may be null
-     * @param <T>          generic type to allow this filter to be used with any entity type
+     * @param field     the field to filter by
+     * @param intFilter the integer filter DTO, may be null
+     * @param <T>       generic type to allow this filter to be used with any entity type
      * @return the specification for the given integer filter,
      * or {@link SpecificationUtil#alwaysTrue()} if the filter is null
      */
-    public static <T> Specification<T> intFilter(String field, @Nullable IntFilterDto intFilterDto) {
-        if (intFilterDto == null) {
+    public static <T> Specification<T> intFilter(String field, @Nullable IntFilter intFilter) {
+        if (intFilter == null) {
             return alwaysTrue();
         }
 
-        return Specification.<T>where(equalTo(field, intFilterDto.getEquals()))
-                .and(lessThan(field, intFilterDto.getLessThan()))
-                .and(greaterThan(field, intFilterDto.getGreaterThan()));
+        return Specification.<T>where(equalTo(field, intFilter.getEquals()))
+                .and(lessThan(field, intFilter.getLessThan()))
+                .and(greaterThan(field, intFilter.getGreaterThan()));
     }
 
     /**

@@ -1,6 +1,6 @@
 package de.unistuttgart.iste.gits.common.util;
 
-import de.unistuttgart.iste.gits.generated.dto.SortDirectionDto;
+import de.unistuttgart.iste.gits.generated.dto.SortDirection;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -25,7 +25,7 @@ public class SortUtil {
      * @return the created {@link Sort} object. If sortField is empty or null, {@link Sort#unsorted()} is returned.
      */
     @NonNull
-    public static Sort createSort(@Nullable List<String> sortFields, @Nullable List<SortDirectionDto> sortDirections) {
+    public static Sort createSort(@Nullable List<String> sortFields, @Nullable List<SortDirection> sortDirections) {
         Sort sort = Sort.unsorted();
         if (sortFields == null) {
             return sort;
@@ -41,11 +41,11 @@ public class SortUtil {
     }
 
     @NonNull
-    private static Sort.Direction getSortDirection(List<SortDirectionDto> sortDirections, int index) {
+    private static Sort.Direction getSortDirection(List<SortDirection> sortDirections, int index) {
         if (sortDirections == null || index >= sortDirections.size()) {
             return Sort.Direction.ASC;
         }
-        return sortDirections.get(index) == SortDirectionDto.ASC
+        return sortDirections.get(index) == SortDirection.ASC
                 ? Sort.Direction.ASC
                 : Sort.Direction.DESC;
     }
