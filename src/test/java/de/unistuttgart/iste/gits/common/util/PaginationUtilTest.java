@@ -1,7 +1,7 @@
 package de.unistuttgart.iste.gits.common.util;
 
-import de.unistuttgart.iste.gits.generated.dto.PaginationDto;
-import de.unistuttgart.iste.gits.generated.dto.PaginationInfoDto;
+import de.unistuttgart.iste.gits.generated.dto.Pagination;
+import de.unistuttgart.iste.gits.generated.dto.PaginationInfo;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.*;
 
@@ -35,12 +35,12 @@ class PaginationUtilTest {
      */
     @Test
     void testCreatePageable() {
-        PaginationDto paginationDto = PaginationDto.builder()
+        Pagination pagination = Pagination.builder()
                 .setPage(1)
                 .setSize(10)
                 .build();
 
-        Pageable pageable = PaginationUtil.createPageable(paginationDto, Sort.unsorted());
+        Pageable pageable = PaginationUtil.createPageable(pagination, Sort.unsorted());
         assertThat(pageable.isPaged(), equalTo(true));
         assertThat(pageable.getPageNumber(), equalTo(1));
         assertThat(pageable.getPageSize(), equalTo(10));
@@ -55,7 +55,7 @@ class PaginationUtilTest {
      */
     @Test
     void testCreateUnpagedPaginationInfoDto() {
-        PaginationInfoDto paginationDto = PaginationUtil.unpagedPaginationInfoDto(10);
+        PaginationInfo paginationDto = PaginationUtil.unpagedPaginationInfo(10);
 
         assertThat(paginationDto.getPage(), equalTo(0));
         assertThat(paginationDto.getSize(), equalTo(10));
@@ -72,7 +72,7 @@ class PaginationUtilTest {
     @Test
     void testCreatePaginationInfoDto() {
         Page<?> page = new PageImpl<>(List.of(), PageRequest.of(0, 10), 20);
-        PaginationInfoDto paginationDto = PaginationUtil.createPaginationInfoDto(page);
+        PaginationInfo paginationDto = PaginationUtil.createPaginationInfo(page);
 
         assertThat(paginationDto.getPage(), equalTo(0));
         assertThat(paginationDto.getSize(), equalTo(10));
