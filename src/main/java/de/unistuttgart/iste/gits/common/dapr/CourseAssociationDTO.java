@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -14,7 +15,7 @@ import java.util.UUID;
 public class CourseAssociationDTO {
 
     private UUID resourceId;
-    private UUID chapterId;
+    private List<UUID> chapterIds;
     private CrudOperation operation;
 
 }
