@@ -18,7 +18,7 @@ public class RequestHeaderUserProcessor {
 
         request.configureExecutionInput(
                 ((executionInput, builder) -> builder.graphQLContext(Collections.singletonMap(
-                        "CurrentUser", currentUser
+                        "currentUser", currentUser
                 )).build())
         );
 
