@@ -11,7 +11,7 @@ import java.util.Collections;
 
 public class RequestHeaderUserProcessor {
     @SneakyThrows
-    public Mono<WebGraphQlResponse> process(WebGraphQlRequest request, WebGraphQlInterceptor.Chain chain) {
+    public static Mono<WebGraphQlResponse> process(WebGraphQlRequest request, WebGraphQlInterceptor.Chain chain) {
         String value = request.getHeaders().getFirst("CurrentUser");
 
         User currentUser = (new ObjectMapper()).readValue(value, User.class);
