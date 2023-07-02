@@ -15,6 +15,10 @@ import java.util.Collections;
 /**
  * Simple helper class which can be used by WebGraphQlInterceptor implementations to extract the current user from the
  * request headers and add it to the GraphQL context.
+ *
+ * <a href="https://gits-enpro.readthedocs.io/en/latest/dev-manuals/backend/auth%26accessing-user-data.html">
+ *     Check the docs to learn how to use this class
+ * </a>
  */
 public class RequestHeaderUserProcessor {
     /**
