@@ -28,8 +28,9 @@ public class RequestHeaderUserProcessor {
      */
     @SneakyThrows
     public static void process(WebGraphQlRequest request) {
-        if(!request.getHeaders().containsKey("CurrentUser"))
+        if(!request.getHeaders().containsKey("CurrentUser")) {
             return;
+        }
 
         String value = request.getHeaders().getFirst("CurrentUser");
 
