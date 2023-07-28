@@ -14,14 +14,17 @@ public class LoggedInUser {
     private final String userName;
     private final String firstName;
     private final String lastName;
+    private final String authToken;
 
     public LoggedInUser(@JsonProperty("id") UUID id,
                         @JsonProperty("userName") String userName,
                         @JsonProperty("firstName") String firstName,
-                        @JsonProperty("lastName") String lastName) {
+                        @JsonProperty("lastName") String lastName,
+                        @JsonProperty("authToken") String authToken) {
         this.id = id;
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.authToken = authToken;
     }
 }

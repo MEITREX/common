@@ -17,7 +17,8 @@ public class RequestHeaderUserProcessorTest {
                     "id": "123e4567-e89b-12d3-a456-426614174000",
                     "userName": "MyUserName",
                     "firstName": "John",
-                    "lastName": "Doe"
+                    "lastName": "Doe",
+                    "authToken": "this isn't an auth token"
                 }
                 """;
 
@@ -25,7 +26,8 @@ public class RequestHeaderUserProcessorTest {
             java.util.UUID.fromString("123e4567-e89b-12d3-a456-426614174000"),
             "MyUserName",
             "John",
-            "Doe"
+            "Doe",
+                "this isn't an auth token"
         );
 
         HttpHeaders headers = new HttpHeaders();
