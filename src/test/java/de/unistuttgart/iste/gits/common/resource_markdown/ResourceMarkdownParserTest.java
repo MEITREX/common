@@ -1,8 +1,6 @@
 package de.unistuttgart.iste.gits.common.resource_markdown;
 
-import de.unistuttgart.iste.gits.generated.dto.ResourceMarkdownInput;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 
 import java.util.UUID;
 
