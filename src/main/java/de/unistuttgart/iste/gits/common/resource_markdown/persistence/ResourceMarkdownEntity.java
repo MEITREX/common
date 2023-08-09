@@ -1,14 +1,11 @@
 package de.unistuttgart.iste.gits.common.resource_markdown.persistence;
 
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
