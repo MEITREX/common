@@ -1,4 +1,4 @@
-package de.unistuttgart.iste.gits.common.resource_markdown.persistence;
+package de.unistuttgart.iste.gits.common.resource_markdown;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
