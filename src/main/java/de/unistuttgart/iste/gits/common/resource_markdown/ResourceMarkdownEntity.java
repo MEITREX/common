@@ -2,10 +2,7 @@ package de.unistuttgart.iste.gits.common.resource_markdown;
 
 import de.unistuttgart.iste.gits.generated.dto.ResourceMarkdownInput;
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,22 +18,27 @@ import java.util.regex.Pattern;
  *     the specification
  * </a>.
  */
-@Data
-@Builder
+@Getter
 @Embeddable
-@NoArgsConstructor
-@AllArgsConstructor
 public class ResourceMarkdownEntity {
-    private String rawText;
+    private String text;
     private List<UUID> referencedMediaRecordIds;
 
+    public ResourceMarkdownEntity() {
+        setText("");
+    }
+
+    public ResourceMarkdownEntity(String text) {
+        setText(text);
+    }
+
     /**
-     * Parses a string containing ResourceMarkdown to a new ResourceMarkdownEntity instance.
-     *
-     * @param text The text to parse.
-     * @return Returns a ResourceMarkdownEntity containing the parsed data from the input text.
+     * Sets the Markdown text of this entity and parses it and populates related fields with the parsed data.
+     * @param text The new Markdown text this entity should have.
      */
-    public static ResourceMarkdownEntity fromString(String text) {
+    public void setText(String text) {
+        this.text = text;
+
         // quite a complicated regex pattern to match a ResourceMarkdown link. For an explanation of this regex, see
         // the specification document of ResourceMarkdown:
         // https://gits-enpro.readthedocs.io/en/latest/dev-manuals/api-specifications/ResourceMarkdown.html
@@ -45,10 +47,10 @@ public class ResourceMarkdownEntity {
         // name (the string before the "/") and the other one for the UUID after the "/"
         Pattern pattern = Pattern.compile(
                 "\\[\\[" +
-                "([a-zA-Z]+)" +
-                "/" +
-                "([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})" +
-                "\\]\\]");
+                        "([a-zA-Z]+)" +
+                        "/" +
+                        "([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})" +
+                        "\\]\\]");
 
         Matcher matcher = pattern.matcher(text);
 
@@ -66,13 +68,6 @@ public class ResourceMarkdownEntity {
             }
         }
 
-        return ResourceMarkdownEntity.builder()
-                .rawText(text)
-                .referencedMediaRecordIds(referencedMediaRecordIds)
-                .build();
-    }
-
-    public static ResourceMarkdownEntity fromResourceMarkdownInput(ResourceMarkdownInput input) {
-        return ResourceMarkdownEntity.fromString(input.getRawText());
+        this.referencedMediaRecordIds = referencedMediaRecordIds;
     }
 }

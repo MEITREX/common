@@ -17,10 +17,9 @@ class ResourceMarkdownParserTest {
                 A second media record link [[media/5d880f92-b9b6-41f5-be8c-4ba3b07bf602]] is here.
                 """;
 
-        ResourceMarkdownInput input = new ResourceMarkdownInput(text);
-        ResourceMarkdownEntity entity = ResourceMarkdownEntity.fromResourceMarkdownInput(input);
+        ResourceMarkdownEntity entity = new ResourceMarkdownEntity(text);
 
-        assertThat(entity.getRawText()).isEqualTo(text);
+        assertThat(entity.getText()).isEqualTo(text);
         assertThat(entity.getReferencedMediaRecordIds()).containsExactly(
                 UUID.fromString("4a2bbd16-866e-47ab-a413-dcd7d6152c38"),
                 UUID.fromString("5d880f92-b9b6-41f5-be8c-4ba3b07bf602")

@@ -2,7 +2,7 @@ type ResourceMarkdown {
     """
     The raw ResourceMarkdown text.
     """
-    rawText: String!
+    text: String!
     """
     Ids of MediaRecords referenced in the ResourceMarkdown text in order.
     """
@@ -13,5 +13,5 @@ input ResourceMarkdownInput {
     """
     The raw ResourceMarkdown text.
     """
-    rawText: String!
+    text: String!
 }
