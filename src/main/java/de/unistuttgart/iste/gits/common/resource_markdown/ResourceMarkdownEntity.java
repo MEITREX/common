@@ -1,5 +1,6 @@
 package de.unistuttgart.iste.gits.common.resource_markdown;
 
+import de.unistuttgart.iste.gits.generated.dto.ResourceMarkdownInput;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +36,7 @@ public class ResourceMarkdownEntity {
      * @param text The text to parse.
      * @return Returns a ResourceMarkdownEntity containing the parsed data from the input text.
      */
-    public static ResourceMarkdownEntity parse(String text) {
+    public static ResourceMarkdownEntity fromString(String text) {
         // quite a complicated regex pattern to match a ResourceMarkdown link. For an explanation of this regex, see
         // the specification document of ResourceMarkdown:
         // https://gits-enpro.readthedocs.io/en/latest/dev-manuals/api-specifications/ResourceMarkdown.html
@@ -69,5 +70,9 @@ public class ResourceMarkdownEntity {
                 .rawText(text)
                 .referencedMediaRecordIds(referencedMediaRecordIds)
                 .build();
+    }
+
+    public static ResourceMarkdownEntity fromResourceMarkdownInput(ResourceMarkdownInput input) {
+        return ResourceMarkdownEntity.fromString(input.getRawText());
     }
 }

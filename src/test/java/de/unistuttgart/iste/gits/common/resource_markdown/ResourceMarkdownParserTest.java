@@ -1,5 +1,6 @@
 package de.unistuttgart.iste.gits.common.resource_markdown;
 
+import de.unistuttgart.iste.gits.generated.dto.ResourceMarkdownInput;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -16,7 +17,8 @@ class ResourceMarkdownParserTest {
                 A second media record link [[media/5d880f92-b9b6-41f5-be8c-4ba3b07bf602]] is here.
                 """;
 
-        ResourceMarkdownEntity entity = ResourceMarkdownEntity.parse(text);
+        ResourceMarkdownInput input = new ResourceMarkdownInput(text);
+        ResourceMarkdownEntity entity = ResourceMarkdownEntity.fromResourceMarkdownInput(input);
 
         assertThat(entity.getRawText()).isEqualTo(text);
         assertThat(entity.getReferencedMediaRecordIds()).containsExactly(
