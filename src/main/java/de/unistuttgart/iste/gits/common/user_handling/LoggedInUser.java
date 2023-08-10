@@ -1,5 +1,6 @@
 package de.unistuttgart.iste.gits.common.user_handling;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
@@ -9,6 +10,7 @@ import java.util.UUID;
  * This class represents user data for a logged-in user as provided by keycloak.
  */
 @Getter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class LoggedInUser {
     private final UUID id;
     private final String userName;
