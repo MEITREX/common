@@ -1,6 +1,7 @@
 package de.unistuttgart.iste.gits.common.user_handling;
 
 import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
@@ -37,7 +38,10 @@ public class RequestHeaderUserProcessor {
         String value = request.getHeaders().getFirst("CurrentUser");
 
         try {
-            LoggedInUser currentUser = (new ObjectMapper()).readValue(value, LoggedInUser.class);
+            LoggedInUser currentUser = (new ObjectMapper())
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, true)
+                    .readValue(value, LoggedInUser.class);
 
             request.configureExecutionInput(((executionInput, builder) ->
                     builder.graphQLContext(Collections.singletonMap("currentUser", currentUser)).build()));
