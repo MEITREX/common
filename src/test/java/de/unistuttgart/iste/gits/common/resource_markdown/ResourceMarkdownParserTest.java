@@ -1,11 +1,10 @@
 package de.unistuttgart.iste.gits.common.resource_markdown;
 
-import de.unistuttgart.iste.gits.generated.dto.ResourceMarkdownInput;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ResourceMarkdownParserTest {
     @Test
@@ -17,7 +16,7 @@ class ResourceMarkdownParserTest {
                 A second media record link [[media/5d880f92-b9b6-41f5-be8c-4ba3b07bf602]] is here.
                 """;
 
-        ResourceMarkdownEntity entity = new ResourceMarkdownEntity(text);
+        ResourceMarkdownEmbeddable entity = new ResourceMarkdownEmbeddable(text);
 
         assertThat(entity.getText()).isEqualTo(text);
         assertThat(entity.getReferencedMediaRecordIds()).containsExactly(

@@ -1,73 +1,51 @@
 package de.unistuttgart.iste.gits.common.resource_markdown;
 
-import de.unistuttgart.iste.gits.generated.dto.ResourceMarkdownInput;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
- * An entity to store ResourceMarkdown text.
+ * Wrapper class for the ResourceMarkdownEmbeddable in case it is easier to use
+ * as an entity, e.g., when multiple markdowns are referenced by the same entity.
  * <br />
- * For more information on ResourceMarkdown see
- * <a href="https://gits-enpro.readthedocs.io/en/latest/dev-manuals/api-specifications/ResourceMarkdown.html">
- *     the specification
- * </a>.
+ * As this is less performant than the embeddable, it should only be used if necessary.
+ * <br />
+ * You need to add the following annotation to your application class:
+ * {@code @EntityScan({"de.unistuttgart.iste.gits.common.resource_markdown", <your entity package>})}
  */
-@Getter
-@Embeddable
+@Entity(name = "ResourceMarkdown")
+@Data
+@Builder
+@AllArgsConstructor
 public class ResourceMarkdownEntity {
-    private String text;
-    private List<UUID> referencedMediaRecordIds;
+
+    @Id
+    @GeneratedValue
+    @EqualsAndHashCode.Exclude
+    private UUID id;
+
+    @Embedded
+    private ResourceMarkdownEmbeddable resourceMarkdown;
 
     public ResourceMarkdownEntity() {
-        setText("");
+        this.resourceMarkdown = new ResourceMarkdownEmbeddable();
+    }
+
+    public ResourceMarkdownEntity(ResourceMarkdownEmbeddable resourceMarkdown) {
+        this.resourceMarkdown = resourceMarkdown;
     }
 
     public ResourceMarkdownEntity(String text) {
-        setText(text);
+        this.resourceMarkdown = new ResourceMarkdownEmbeddable(text);
     }
 
-    /**
-     * Sets the Markdown text of this entity and parses it and populates related fields with the parsed data.
-     * @param text The new Markdown text this entity should have.
-     */
-    public void setText(String text) {
-        this.text = text;
+    public String getText() {
+        return this.resourceMarkdown.getText();
+    }
 
-        // quite a complicated regex pattern to match a ResourceMarkdown link. For an explanation of this regex, see
-        // the specification document of ResourceMarkdown:
-        // https://gits-enpro.readthedocs.io/en/latest/dev-manuals/api-specifications/ResourceMarkdown.html
-        // The only thing added here are additional backslashes for
-        // Java string escaping, and two pairs of braces "( )" to create two capture groups, one for the resource type
-        // name (the string before the "/") and the other one for the UUID after the "/"
-        Pattern pattern = Pattern.compile(
-                "\\[\\[" +
-                        "([a-zA-Z]+)" +
-                        "/" +
-                        "([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})" +
-                        "\\]\\]");
-
-        Matcher matcher = pattern.matcher(text);
-
-        List<UUID> referencedMediaRecordIds = new ArrayList<>();
-
-        // find all matches in the input text
-        while(matcher.find()) {
-            String resourceType = matcher.group(1);
-            UUID resourceId = UUID.fromString(matcher.group(2));
-
-            // We don't throw an error and instead silently ignore it if an invalid resourceType is encountered
-            // because for markdown parsing, something invalid is just treated as plain text
-            switch(resourceType) {
-                case "media" -> referencedMediaRecordIds.add(resourceId);
-            }
-        }
-
-        this.referencedMediaRecordIds = referencedMediaRecordIds;
+    public List<UUID> getReferencedMediaRecordIds() {
+        return this.resourceMarkdown.getReferencedMediaRecordIds();
     }
 }
