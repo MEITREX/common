@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
  * </a>.
  */
 @Getter
+@Setter
 @EqualsAndHashCode
 @ToString
 @Embeddable

@@ -48,4 +48,12 @@ public class ResourceMarkdownEntity {
     public List<UUID> getReferencedMediaRecordIds() {
         return this.resourceMarkdown.getReferencedMediaRecordIds();
     }
+
+    public void setText(String text) {
+        this.resourceMarkdown.setText(text);
+    }
+
+    public void setReferencedMediaRecordIds(List<UUID> referencedMediaRecordIds) {
+        this.resourceMarkdown.setReferencedMediaRecordIds(referencedMediaRecordIds);
+    }
 }
