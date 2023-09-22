@@ -19,4 +19,11 @@ public class StreamUtils {
     public static <T> long count(Collection<? extends T> collection, Predicate<? super T> filter) {
         return collection.stream().filter(filter).count();
     }
+
+    /**
+     * Like {@link #count(Collection, Predicate)} but returns an int instead of a long.
+     */
+    public static <T> int countAsInt(Collection<? extends T> collection, Predicate<? super T> filter) {
+        return (int) count(collection, filter);
+    }
 }
