@@ -74,7 +74,7 @@ class SortUtilTest {
      */
     @Test
     void testMultipleSortFields() {
-        Sort sort = SortUtil.createSort(List.of("field1", "field2"),
+        final Sort sort = SortUtil.createSort(List.of("field1", "field2"),
                 List.of(SortDirection.ASC, SortDirection.DESC));
 
         assertThat(sort.isSorted(), equalTo(true));

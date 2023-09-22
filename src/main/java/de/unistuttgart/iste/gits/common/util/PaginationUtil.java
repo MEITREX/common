@@ -2,10 +2,7 @@ package de.unistuttgart.iste.gits.common.util;
 
 import de.unistuttgart.iste.gits.generated.dto.Pagination;
 import de.unistuttgart.iste.gits.generated.dto.PaginationInfo;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.lang.Nullable;
 
 /**
@@ -26,7 +23,7 @@ public class PaginationUtil {
      * @return the created {@link Pageable}.
      * If the given {@link Pagination} is null, {@link Pageable#unpaged()} is returned.
      */
-    public static Pageable createPageable(@Nullable Pagination pagination, Sort sort) {
+    public static Pageable createPageable(@Nullable final Pagination pagination, final Sort sort) {
         if (pagination == null) {
             return Pageable.unpaged();
         }
@@ -43,7 +40,7 @@ public class PaginationUtil {
      * @param result the {@link Page} to create the {@link PaginationInfo} from.
      * @return the created {@link PaginationInfo}.
      */
-    public static PaginationInfo createPaginationInfo(Page<?> result) {
+    public static PaginationInfo createPaginationInfo(final Page<?> result) {
         return PaginationInfo.builder()
                 .setPage(result.getNumber())
                 .setSize(result.getSize())
@@ -60,7 +57,7 @@ public class PaginationUtil {
      * @return the created {@link PaginationInfo},
      * which has page 0, size totalElements, totalPages 1 and hasNext false.
      */
-    public static PaginationInfo unpagedPaginationInfo(int totalElements) {
+    public static PaginationInfo unpagedPaginationInfo(final int totalElements) {
         return PaginationInfo.builder()
                 .setPage(0)
                 .setSize(totalElements)
