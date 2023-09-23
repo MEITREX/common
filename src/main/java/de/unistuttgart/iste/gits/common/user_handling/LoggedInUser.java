@@ -18,11 +18,11 @@ public class LoggedInUser {
     private final String lastName;
     private final List<CourseMembership> courseMemberships;
 
-    public LoggedInUser(@JsonProperty("id") UUID id,
-                        @JsonProperty("userName") String userName,
-                        @JsonProperty("firstName") String firstName,
-                        @JsonProperty("lastName") String lastName,
-                        @JsonProperty("courseMemberships") List<CourseMembership> courseMemberships) {
+    public LoggedInUser(@JsonProperty("id") final UUID id,
+                        @JsonProperty("userName") final String userName,
+                        @JsonProperty("firstName") final String firstName,
+                        @JsonProperty("lastName") final String lastName,
+                        @JsonProperty("courseMemberships") final List<CourseMembership> courseMemberships) {
         this.id = id;
         this.userName = userName;
         this.firstName = firstName;
@@ -38,11 +38,11 @@ public class LoggedInUser {
         private final OffsetDateTime startDate;
         private final OffsetDateTime endDate;
 
-        public CourseMembership(UUID courseId,
-                                UserRoleInCourse role,
-                                boolean published,
-                                OffsetDateTime startDate,
-                                OffsetDateTime endDate) {
+        public CourseMembership(final UUID courseId,
+                                final UserRoleInCourse role,
+                                final boolean published,
+                                final OffsetDateTime startDate,
+                                final OffsetDateTime endDate) {
             this.courseId = courseId;
             this.role = role;
             this.published = published;
@@ -53,11 +53,11 @@ public class LoggedInUser {
         /**
          * Constructor used for JSON deserialization.
          */
-        public CourseMembership(@JsonProperty("courseId") UUID courseId,
-                                @JsonProperty("role") UserRoleInCourse role,
-                                @JsonProperty("published") boolean published,
-                                @JsonProperty("startDate") String startDate,
-                                @JsonProperty("endDate") String endDate) {
+        public CourseMembership(@JsonProperty("courseId") final UUID courseId,
+                                @JsonProperty("role") final UserRoleInCourse role,
+                                @JsonProperty("published") final boolean published,
+                                @JsonProperty("startDate") final String startDate,
+                                @JsonProperty("endDate") final String endDate) {
             this.courseId = courseId;
             this.role = role;
             this.published = published;

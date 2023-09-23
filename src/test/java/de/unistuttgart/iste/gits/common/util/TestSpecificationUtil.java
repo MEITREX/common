@@ -1,11 +1,7 @@
 package de.unistuttgart.iste.gits.common.util;
 
-import de.unistuttgart.iste.gits.generated.dto.DateTimeFilter;
-import de.unistuttgart.iste.gits.generated.dto.IntFilter;
-import de.unistuttgart.iste.gits.generated.dto.StringFilter;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
+import de.unistuttgart.iste.gits.generated.dto.*;
+import jakarta.persistence.criteria.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -40,7 +36,7 @@ class TestSpecificationUtil {
      */
     @Test
     void testNullSafety() {
-        Function<Object, Specification<Object>> dummyFunction = o -> Specification.where(null);
+        final Function<Object, Specification<Object>> dummyFunction = o -> Specification.where(null);
 
         assertThat(SpecificationUtil.stringFilter("test", null),
                 equalTo(SpecificationUtil.alwaysTrue()));
@@ -78,7 +74,7 @@ class TestSpecificationUtil {
      */
     @Test
     void testStringFilter() {
-        Specification<Object> specification = SpecificationUtil.stringFilter("test", StringFilter.builder()
+        final Specification<Object> specification = SpecificationUtil.stringFilter("test", StringFilter.builder()
                 .setContains("testContains")
                 .setEquals("testEquals")
                 .build());
@@ -96,9 +92,9 @@ class TestSpecificationUtil {
      */
     @Test
     void testDateTimeFilter() {
-        var after = LocalDate.of(2022, 1, 1).atStartOfDay().atOffset(ZoneOffset.UTC);
-        var before = LocalDate.of(2023, 1, 1).atStartOfDay().atOffset(ZoneOffset.UTC);
-        Specification<Object> specification = SpecificationUtil.dateTimeFilter("test", DateTimeFilter.builder()
+        final var after = LocalDate.of(2022, 1, 1).atStartOfDay().atOffset(ZoneOffset.UTC);
+        final var before = LocalDate.of(2023, 1, 1).atStartOfDay().atOffset(ZoneOffset.UTC);
+        final Specification<Object> specification = SpecificationUtil.dateTimeFilter("test", DateTimeFilter.builder()
                 .setAfter(after)
                 .setBefore(before)
                 .build());
@@ -116,7 +112,7 @@ class TestSpecificationUtil {
      */
     @Test
     void testBooleanFilter() {
-        Specification<Object> specification = SpecificationUtil.booleanFilter("test", true);
+        final Specification<Object> specification = SpecificationUtil.booleanFilter("test", true);
 
         specification.toPredicate(root, criteriaQuery, criteriaBuilder);
 
@@ -130,7 +126,7 @@ class TestSpecificationUtil {
      */
     @Test
     void testIntFilter() {
-        Specification<Object> specification = SpecificationUtil.intFilter("test",
+        final Specification<Object> specification = SpecificationUtil.intFilter("test",
                 IntFilter.builder().setEquals(1).setGreaterThan(2).setLessThan(3).build());
 
         specification.toPredicate(root, criteriaQuery, criteriaBuilder);

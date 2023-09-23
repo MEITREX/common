@@ -35,12 +35,12 @@ class PaginationUtilTest {
      */
     @Test
     void testCreatePageable() {
-        Pagination pagination = Pagination.builder()
+        final Pagination pagination = Pagination.builder()
                 .setPage(1)
                 .setSize(10)
                 .build();
 
-        Pageable pageable = PaginationUtil.createPageable(pagination, Sort.unsorted());
+        final Pageable pageable = PaginationUtil.createPageable(pagination, Sort.unsorted());
         assertThat(pageable.isPaged(), equalTo(true));
         assertThat(pageable.getPageNumber(), equalTo(1));
         assertThat(pageable.getPageSize(), equalTo(10));
@@ -55,7 +55,7 @@ class PaginationUtilTest {
      */
     @Test
     void testCreateUnpagedPaginationInfoDto() {
-        PaginationInfo paginationDto = PaginationUtil.unpagedPaginationInfo(10);
+        final PaginationInfo paginationDto = PaginationUtil.unpagedPaginationInfo(10);
 
         assertThat(paginationDto.getPage(), equalTo(0));
         assertThat(paginationDto.getSize(), equalTo(10));
@@ -71,8 +71,8 @@ class PaginationUtilTest {
      */
     @Test
     void testCreatePaginationInfoDto() {
-        Page<?> page = new PageImpl<>(List.of(), PageRequest.of(0, 10), 20);
-        PaginationInfo paginationDto = PaginationUtil.createPaginationInfo(page);
+        final Page<?> page = new PageImpl<>(List.of(), PageRequest.of(0, 10), 20);
+        final PaginationInfo paginationDto = PaginationUtil.createPaginationInfo(page);
 
         assertThat(paginationDto.getPage(), equalTo(0));
         assertThat(paginationDto.getSize(), equalTo(10));

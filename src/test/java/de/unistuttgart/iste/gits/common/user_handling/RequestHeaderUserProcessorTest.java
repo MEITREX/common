@@ -3,6 +3,7 @@ package de.unistuttgart.iste.gits.common.user_handling;
 import org.junit.jupiter.api.Test;
 import org.springframework.graphql.server.WebGraphQlRequest;
 import org.springframework.http.HttpHeaders;
+
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -11,10 +12,11 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class RequestHeaderUserProcessorTest {
+class RequestHeaderUserProcessorTest {
+
     @Test
-    public void testUserDataContextInjection() {
-        String json = """
+    void testUserDataContextInjection() {
+        final String json = """
                 {
                     "id": "123e4567-e89b-12d3-a456-426614174000",
                     "userName": "MyUserName",
@@ -32,7 +34,7 @@ public class RequestHeaderUserProcessorTest {
                 }
                 """;
 
-        LoggedInUser user = new LoggedInUser(
+        final LoggedInUser user = new LoggedInUser(
                 java.util.UUID.fromString("123e4567-e89b-12d3-a456-426614174000"),
                 "MyUserName",
                 "John",
@@ -46,12 +48,12 @@ public class RequestHeaderUserProcessorTest {
                 )
         );
 
-        HttpHeaders headers = new HttpHeaders();
+        final HttpHeaders headers = new HttpHeaders();
         headers.add("CurrentUser", json);
 
         // ugly way of instantiating a WebGraphQlRequest. We have to add a key-value pair with query as a key to the
         // body so the constructor of WebGraphQlRequest doesn't complain.
-        WebGraphQlRequest request = new WebGraphQlRequest(
+        final WebGraphQlRequest request = new WebGraphQlRequest(
                 URI.create(""), headers, null, Map.of(), Map.of("query", "a"), "", null);
 
         RequestHeaderUserProcessor.process(request);
@@ -62,12 +64,12 @@ public class RequestHeaderUserProcessorTest {
     }
 
     @Test
-    public void testNoUserDataContextInjection() {
-        HttpHeaders headers = new HttpHeaders();
+    void testNoUserDataContextInjection() {
+        final HttpHeaders headers = new HttpHeaders();
 
         // ugly way of instantiating a WebGraphQlRequest. We have to add a key-value pair with query as a key to the
         // body so the constructor of WebGraphQlRequest doesn't complain.
-        WebGraphQlRequest request = new WebGraphQlRequest(
+        final WebGraphQlRequest request = new WebGraphQlRequest(
                 URI.create(""), headers, null, Map.of(), Map.of("query", "a"), "", null);
 
         RequestHeaderUserProcessor.process(request);
@@ -76,8 +78,8 @@ public class RequestHeaderUserProcessorTest {
     }
 
     @Test
-    public void testInvalidUserDataContextInjection() {
-        String json = """
+    void testInvalidUserDataContextInjection() {
+        final String json = """
                 {
                     "id1": "123e4567-e89b-12d3-a456-426614174000",
                     "userName": "MyUserName",
@@ -86,12 +88,12 @@ public class RequestHeaderUserProcessorTest {
                 }
                 """;
 
-        HttpHeaders headers = new HttpHeaders();
+        final HttpHeaders headers = new HttpHeaders();
         headers.add("CurrentUser", json);
 
         // ugly way of instantiating a WebGraphQlRequest. We have to add a key-value pair with query as a key to the
         // body so the constructor of WebGraphQlRequest doesn't complain.
-        WebGraphQlRequest request = new WebGraphQlRequest(
+        final WebGraphQlRequest request = new WebGraphQlRequest(
                 URI.create(""), headers, null, Map.of(), Map.of("query", "a"), "", null);
 
         assertThatThrownBy(() -> RequestHeaderUserProcessor.process(request))

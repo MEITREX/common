@@ -29,16 +29,16 @@ public class RequestHeaderUserProcessor {
      * @param request The request to process.
      */
     @SneakyThrows
-    public static void process(WebGraphQlRequest request) {
+    public static void process(final WebGraphQlRequest request) {
         if (!request.getHeaders().containsKey("CurrentUser")) {
             log.warn("No CurrentUser header found in request.");
             return;
         }
 
-        String value = request.getHeaders().getFirst("CurrentUser");
+        final String value = request.getHeaders().getFirst("CurrentUser");
 
         try {
-            LoggedInUser currentUser = (new ObjectMapper())
+            final LoggedInUser currentUser = (new ObjectMapper())
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                     .configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, true)
                     .readValue(value, LoggedInUser.class);
@@ -46,7 +46,7 @@ public class RequestHeaderUserProcessor {
             request.configureExecutionInput(((executionInput, builder) ->
                     builder.graphQLContext(Collections.singletonMap("currentUser", currentUser)).build()));
 
-        } catch (JacksonException ex) {
+        } catch (final JacksonException ex) {
             log.error("Could not parse the following value as a LoggedInUser object: " + value, ex);
             // rethrow as a generic exception so we don't leak server-internal data to the client (json contents)
             throw new IllegalArgumentException("Invalid user data in request header.");

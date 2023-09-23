@@ -1,11 +1,7 @@
 package de.unistuttgart.iste.gits.common.util;
 
-import de.unistuttgart.iste.gits.generated.dto.DateTimeFilter;
-import de.unistuttgart.iste.gits.generated.dto.IntFilter;
-import de.unistuttgart.iste.gits.generated.dto.StringFilter;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.Expression;
-import jakarta.persistence.criteria.Root;
+import de.unistuttgart.iste.gits.generated.dto.*;
+import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 
@@ -43,7 +39,7 @@ public class SpecificationUtil {
      * @return the specification for the given string filter,
      * or {@link SpecificationUtil#alwaysTrue()} if the filter is null
      */
-    public static <T> Specification<T> stringFilter(String field, @Nullable StringFilter stringFilter) {
+    public static <T> Specification<T> stringFilter(final String field, @Nullable final StringFilter stringFilter) {
         if (stringFilter == null) {
             return alwaysTrue();
         }
@@ -62,7 +58,7 @@ public class SpecificationUtil {
      * @return the specification for the given date time filter,
      * or {@link SpecificationUtil#alwaysTrue()} if the filter is null
      */
-    public static <T> Specification<T> dateTimeFilter(String field, @Nullable DateTimeFilter dateTimeFilter) {
+    public static <T> Specification<T> dateTimeFilter(final String field, @Nullable final DateTimeFilter dateTimeFilter) {
         if (dateTimeFilter == null) {
             return alwaysTrue();
         }
@@ -80,7 +76,7 @@ public class SpecificationUtil {
      * @return the specification for the given integer filter,
      * or {@link SpecificationUtil#alwaysTrue()} if the filter is null
      */
-    public static <T> Specification<T> intFilter(String field, @Nullable IntFilter intFilter) {
+    public static <T> Specification<T> intFilter(final String field, @Nullable final IntFilter intFilter) {
         if (intFilter == null) {
             return alwaysTrue();
         }
@@ -101,8 +97,8 @@ public class SpecificationUtil {
      * @return the specification for the "not" filter, or {@link SpecificationUtil#alwaysTrue()} if the filter is null.
      */
     public static <EntityType, DtoType> Specification<EntityType> not(
-            DtoType not,
-            Function<DtoType, Specification<EntityType>> dtoToSpecification) {
+            final DtoType not,
+            final Function<DtoType, Specification<EntityType>> dtoToSpecification) {
 
         return Optional.ofNullable(not)
                 .map(dtoToSpecification)
@@ -120,8 +116,8 @@ public class SpecificationUtil {
      * @return the specification for the "and" filter, or {@link SpecificationUtil#alwaysTrue()} if the filter is null.
      */
     public static <EntityType, DtoType> Specification<EntityType> and(
-            @Nullable List<DtoType> ands,
-            Function<DtoType, Specification<EntityType>> dtoToSpecification) {
+            @Nullable final List<DtoType> ands,
+            final Function<DtoType, Specification<EntityType>> dtoToSpecification) {
 
         return Stream.ofNullable(ands)
                 .flatMap(List::stream)
@@ -139,8 +135,8 @@ public class SpecificationUtil {
      * @return the specification for the "or" filter, or {@link SpecificationUtil#alwaysFalse()} if the filter is null.
      */
     public static <EntityType, DtoType> Specification<EntityType> or(
-            @Nullable List<DtoType> ors,
-            Function<DtoType, Specification<EntityType>> dtoToSpecification) {
+            @Nullable final List<DtoType> ors,
+            final Function<DtoType, Specification<EntityType>> dtoToSpecification) {
 
         return Stream.ofNullable(ors)
                 .flatMap(List::stream)
@@ -159,7 +155,7 @@ public class SpecificationUtil {
      * @return the specification that checks if the field equals the value,
      * or {@link SpecificationUtil#alwaysTrue()} if the value is null
      */
-    public static <T> Specification<T> booleanFilter(String field, @Nullable Boolean value) {
+    public static <T> Specification<T> booleanFilter(final String field, @Nullable final Boolean value) {
         return equalTo(field, value);
     }
 
@@ -172,7 +168,7 @@ public class SpecificationUtil {
      * @return the specification that checks if the field equals the value,
      * or {@link SpecificationUtil#alwaysTrue()} if the value is null
      */
-    public static <T> Specification<T> equalTo(String field, @Nullable Object value) {
+    public static <T> Specification<T> equalTo(final String field, @Nullable final Object value) {
         if (value == null) {
             return alwaysTrue();
         }
@@ -189,12 +185,12 @@ public class SpecificationUtil {
      * @return the specification that checks if the field equals the value,
      * or {@link SpecificationUtil#alwaysTrue()} if the value is null
      */
-    public static <T> Specification<T> stringEqualTo(String field, @Nullable String value, boolean ignoreCase) {
+    public static <T> Specification<T> stringEqualTo(final String field, @Nullable final String value, final boolean ignoreCase) {
         if (value == null) {
             return alwaysTrue();
         }
         return (root, query, criteriaBuilder) -> {
-            Expression<String> path = toLowerCasePathIfIgnoreCase(field, root, criteriaBuilder, ignoreCase);
+            final Expression<String> path = toLowerCasePathIfIgnoreCase(field, root, criteriaBuilder, ignoreCase);
             return criteriaBuilder.equal(path, toLowerCaseIfIgnoreCase(value, ignoreCase));
         };
     }
@@ -209,12 +205,12 @@ public class SpecificationUtil {
      * @return the specification that checks if the field contains the value,
      * or {@link SpecificationUtil#alwaysTrue()} if the value is null
      */
-    public static <T> Specification<T> contains(String field, String value, boolean ignoreCase) {
+    public static <T> Specification<T> contains(final String field, final String value, final boolean ignoreCase) {
         if (value == null) {
             return alwaysTrue();
         }
         return (root, query, criteriaBuilder) -> {
-            Expression<String> path = toLowerCasePathIfIgnoreCase(field, root, criteriaBuilder, ignoreCase);
+            final Expression<String> path = toLowerCasePathIfIgnoreCase(field, root, criteriaBuilder, ignoreCase);
 
             // use the sql wildcard character % to allow any characters before and after the value
             return criteriaBuilder.like(path, "%" + toLowerCaseIfIgnoreCase(value, ignoreCase) + "%");
@@ -231,7 +227,7 @@ public class SpecificationUtil {
      * @return the specification that checks if the field is less than the value,
      * or {@link SpecificationUtil#alwaysTrue()} if the value is null
      */
-    public static <T, C extends Comparable<C>> Specification<T> lessThan(String field, @Nullable C value) {
+    public static <T, C extends Comparable<C>> Specification<T> lessThan(final String field, @Nullable final C value) {
         if (value == null) {
             return alwaysTrue();
         }
@@ -248,7 +244,7 @@ public class SpecificationUtil {
      * @return the specification that checks if the field is greater than the value,
      * or {@link SpecificationUtil#alwaysTrue()} if the value is null
      */
-    public static <T, C extends Comparable<C>> Specification<T> greaterThan(String field, @Nullable C value) {
+    public static <T, C extends Comparable<C>> Specification<T> greaterThan(final String field, @Nullable final C value) {
         if (value == null) {
             return alwaysTrue();
         }
@@ -271,14 +267,14 @@ public class SpecificationUtil {
         return (Specification<T>) ALWAYS_FALSE;
     }
 
-    private static Expression<String> toLowerCasePathIfIgnoreCase(String field,
-                                                                  Root<?> root,
-                                                                  CriteriaBuilder criteriaBuilder,
-                                                                  boolean ignoreCase) {
+    private static Expression<String> toLowerCasePathIfIgnoreCase(final String field,
+                                                                  final Root<?> root,
+                                                                  final CriteriaBuilder criteriaBuilder,
+                                                                  final boolean ignoreCase) {
         return ignoreCase ? criteriaBuilder.lower(root.get(field)) : root.get(field);
     }
 
-    private static String toLowerCaseIfIgnoreCase(String value, boolean ignoreCase) {
+    private static String toLowerCaseIfIgnoreCase(final String value, final boolean ignoreCase) {
         return ignoreCase ? value.toLowerCase() : value;
     }
 }

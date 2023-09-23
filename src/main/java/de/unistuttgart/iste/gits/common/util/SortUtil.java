@@ -25,14 +25,14 @@ public class SortUtil {
      * @return the created {@link Sort} object. If sortField is empty or null, {@link Sort#unsorted()} is returned.
      */
     @NonNull
-    public static Sort createSort(@Nullable List<String> sortFields, @Nullable List<SortDirection> sortDirections) {
+    public static Sort createSort(@Nullable final List<String> sortFields, @Nullable final List<SortDirection> sortDirections) {
         Sort sort = Sort.unsorted();
         if (sortFields == null) {
             return sort;
         }
 
         for (int index = 0; index < sortFields.size(); index++) {
-            Sort.Direction sortDirection = getSortDirection(sortDirections, index);
+            final Sort.Direction sortDirection = getSortDirection(sortDirections, index);
 
             sort = sort.and(Sort.by(sortDirection, sortFields.get(index)));
         }
@@ -41,7 +41,7 @@ public class SortUtil {
     }
 
     @NonNull
-    private static Sort.Direction getSortDirection(List<SortDirection> sortDirections, int index) {
+    private static Sort.Direction getSortDirection(final List<SortDirection> sortDirections, final int index) {
         if (sortDirections == null || index >= sortDirections.size()) {
             return Sort.Direction.ASC;
         }
