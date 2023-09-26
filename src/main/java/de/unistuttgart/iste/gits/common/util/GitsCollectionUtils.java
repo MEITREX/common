@@ -49,6 +49,26 @@ public class GitsCollectionUtils {
         return mapToSortedList(map, sortedKeys, List.of());
     }
 
+    /**
+     * Sorts a collection of elements by a given list of keys.
+     * The elements are sorted by the order of the keys.
+     * If any key is not found in the elements, null is used as the default value.
+     *
+     * @param elements         list of elements
+     * @param sortedKeys       list of keys
+     * @param groupingFunction function to get the key from an element
+     * @param <K>              type of the keys
+     * @param <T>              type of the elements
+     * @return list of elements, sorted by the keys, potentially with null values.
+     * This list has the same size as the list of keys.
+     */
+    public static <K, T> List<T> sortByKeys(final Collection<T> elements,
+                                            final List<K> sortedKeys,
+                                            final Function<T, K> groupingFunction) {
+        final Map<K, T> map = elements.stream()
+                .collect(Collectors.toMap(groupingFunction, Function.identity()));
+        return mapToSortedList(map, sortedKeys, null);
+    }
 
     /**
      * Converts a map to a list of entries, sorted by a given list of keys.
