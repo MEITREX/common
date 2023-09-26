@@ -1,7 +1,8 @@
 package de.unistuttgart.iste.gits.common.user_handling;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -10,7 +11,8 @@ import java.util.UUID;
 /**
  * This class represents user data for a logged-in user as provided by keycloak.
  */
-@Getter
+@Data
+@Builder
 public class LoggedInUser {
     private final UUID id;
     private final String userName;
@@ -30,7 +32,8 @@ public class LoggedInUser {
         this.courseMemberships = courseMemberships;
     }
 
-    @Getter
+    @Data
+    @Builder
     public static class CourseMembership {
         private final UUID courseId;
         private final UserRoleInCourse role;
