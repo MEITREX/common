@@ -10,8 +10,9 @@ import java.util.UUID;
  */
 public class UserCourseAccessValidator {
     /**
-     * Validates that a user has access to a course at the specified level (role). Also takes into account start and
-     * end dates of the course and its published status.
+     * Validates that a user has access to a course at the specified level (role).
+     * If the user is a student, also takes into account start and end dates of the course and its published status.
+     * If the user is a tutor or lecturer, the user always has access to the course as long as they are a member of it.
      * Throws a NoAccessToCourseException if the user does not have access to the course.
      *
      * @param user                The user to validate.
@@ -27,10 +28,6 @@ public class UserCourseAccessValidator {
                 .findFirst()
                 .orElseThrow(() -> new NoAccessToCourseException(courseId, "User is not a member of the course."));
 
-        if (!courseMembership.isPublished()) {
-            throw new NoAccessToCourseException(courseId, "Course is not published.");
-        }
-
         if (!courseMembership.getRole().hasAtLeastPermissionsOf(requiredMinimumRole)) {
             throw new NoAccessToCourseException(
                     courseId,
@@ -38,18 +35,25 @@ public class UserCourseAccessValidator {
             );
         }
 
-        if (courseMembership.getStartDate().isAfter(OffsetDateTime.now())) {
-            throw new NoAccessToCourseException(
-                    courseId,
-                    "User does not have access to the course because it has not started yet."
-            );
-        }
+        // if the user is a student, also check if the course is published and if the course has started and not ended
+        if (!courseMembership.getRole().hasAtLeastPermissionsOf(LoggedInUser.UserRoleInCourse.TUTOR)) {
+            if (!courseMembership.isPublished()) {
+                throw new NoAccessToCourseException(courseId, "Course is not published.");
+            }
 
-        if (courseMembership.getEndDate().isBefore(OffsetDateTime.now())) {
-            throw new NoAccessToCourseException(
-                    courseId,
-                    "User does not have access to the course because it has ended."
-            );
+            if (courseMembership.getStartDate().isAfter(OffsetDateTime.now())) {
+                throw new NoAccessToCourseException(
+                        courseId,
+                        "User does not have access to the course because it has not started yet."
+                );
+            }
+
+            if (courseMembership.getEndDate().isBefore(OffsetDateTime.now())) {
+                throw new NoAccessToCourseException(
+                        courseId,
+                        "User does not have access to the course because it has ended."
+                );
+            }
         }
     }
 }

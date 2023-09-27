@@ -7,7 +7,8 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserCourseAccessValidatorTest {
     @Test
@@ -86,6 +87,31 @@ class UserCourseAccessValidatorTest {
     }
 
     @Test
+    void testValidateTutorHasAccessToCourseNotPublished() {
+        LoggedInUser user = new LoggedInUser(
+                UUID.randomUUID(),
+                "TestUser",
+                "Test",
+                "User",
+                List.of(
+                        new LoggedInUser.CourseMembership(
+                                UUID.randomUUID(),
+                                LoggedInUser.UserRoleInCourse.TUTOR,
+                                false,
+                                OffsetDateTime.now().minusDays(1),
+                                OffsetDateTime.now().plusDays(1)
+                        )
+                )
+        );
+
+        assertDoesNotThrow(() -> UserCourseAccessValidator.validateUserHasAccessToCourse(
+                user,
+                LoggedInUser.UserRoleInCourse.TUTOR,
+                user.getCourseMemberships().get(0).getCourseId()
+        ));
+    }
+
+    @Test
     void testValidateUserHasNoAccessToCourseWrongRole() {
         LoggedInUser user = new LoggedInUser(
                 UUID.randomUUID(),
@@ -136,6 +162,31 @@ class UserCourseAccessValidatorTest {
     }
 
     @Test
+    void testValidateTutorHasAccesToCourseNotStartedYet() {
+        LoggedInUser user = new LoggedInUser(
+                UUID.randomUUID(),
+                "TestUser",
+                "Test",
+                "User",
+                List.of(
+                        new LoggedInUser.CourseMembership(
+                                UUID.randomUUID(),
+                                LoggedInUser.UserRoleInCourse.TUTOR,
+                                true,
+                                OffsetDateTime.now().plusDays(1),
+                                OffsetDateTime.now().plusDays(2)
+                        )
+                )
+        );
+
+        assertDoesNotThrow(() -> UserCourseAccessValidator.validateUserHasAccessToCourse(
+                user,
+                LoggedInUser.UserRoleInCourse.TUTOR,
+                user.getCourseMemberships().get(0).getCourseId()
+        ));
+    }
+
+    @Test
     void testValidateUserHasNoAccessToCourseEnded() {
         LoggedInUser user = new LoggedInUser(
                 UUID.randomUUID(),
@@ -156,6 +207,31 @@ class UserCourseAccessValidatorTest {
         assertThrows(NoAccessToCourseException.class, () -> UserCourseAccessValidator.validateUserHasAccessToCourse(
                 user,
                 LoggedInUser.UserRoleInCourse.STUDENT,
+                user.getCourseMemberships().get(0).getCourseId()
+        ));
+    }
+
+    @Test
+    void testValidateTutorHasAccessToCourseEnded() {
+        LoggedInUser user = new LoggedInUser(
+                UUID.randomUUID(),
+                "TestUser",
+                "Test",
+                "User",
+                List.of(
+                        new LoggedInUser.CourseMembership(
+                                UUID.randomUUID(),
+                                LoggedInUser.UserRoleInCourse.TUTOR,
+                                true,
+                                OffsetDateTime.now().minusDays(2),
+                                OffsetDateTime.now().minusDays(1)
+                        )
+                )
+        );
+
+        assertDoesNotThrow(() -> UserCourseAccessValidator.validateUserHasAccessToCourse(
+                user,
+                LoggedInUser.UserRoleInCourse.TUTOR,
                 user.getCourseMemberships().get(0).getCourseId()
         ));
     }
