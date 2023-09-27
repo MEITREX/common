@@ -70,8 +70,27 @@ public class LoggedInUser {
     }
 
     public enum UserRoleInCourse {
-        STUDENT,
-        TUTOR,
-        ADMINISTRATOR
+        STUDENT(1),
+        TUTOR(2),
+        ADMINISTRATOR(3);
+
+        UserRoleInCourse(final int roleRanking) {
+            this.roleRanking = roleRanking;
+        }
+
+        /**
+         * Checks if the user has at least the permissions of the specified role.
+         *
+         * @param role The role to check against.
+         * @return True if the user has at least the permissions of the specified role, false otherwise.
+         */
+        public boolean hasAtLeastPermissionsOf(final UserRoleInCourse role) {
+            return this.roleRanking >= role.roleRanking;
+        }
+
+        /**
+         * The ranking of the role in the course. The higher the ranking, the more permissions the role has.
+         */
+        private final int roleRanking;
     }
 }
