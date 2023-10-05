@@ -22,14 +22,14 @@ public class TopicPublisher {
     private final DaprClient client;
 
     /**
-     * Method used to publish dapr messages to a topic
+     * Method used to publish dapr messages to a daprTopic
      *
      * @param dto message
      */
-    protected void publishEvent(final Object dto, final Topic topic) {
-        client.publishEvent(PUBSUB_NAME, topic.getTopic(), dto)
-                .doOnSuccess(response -> log.debug("Published message to topic {}: {}", topic.getTopic(), response))
-                .doOnError(error -> log.error("Error while publishing message to topic {}: {}", topic.getTopic(), error.getMessage()))
+    protected void publishEvent(final Object dto, final DaprTopic daprTopic) {
+        client.publishEvent(PUBSUB_NAME, daprTopic.getTopic(), dto)
+                .doOnSuccess(response -> log.debug("Published message to daprTopic {}: {}", daprTopic.getTopic(), response))
+                .doOnError(error -> log.error("Error while publishing message to daprTopic {}: {}", daprTopic.getTopic(), error.getMessage()))
                 .subscribe();
     }
 
@@ -44,7 +44,7 @@ public class TopicPublisher {
                 .courseId(courseId)
                 .operation(operation)
                 .build();
-        publishEvent(dto, Topic.COURSE_CHANGED);
+        publishEvent(dto, DaprTopic.COURSE_CHANGED);
     }
 
     /**
@@ -58,7 +58,7 @@ public class TopicPublisher {
                 .chapterIds(chapterIds)
                 .operation(operation)
                 .build();
-        publishEvent(dto, Topic.CHAPTER_CHANGED);
+        publishEvent(dto, DaprTopic.CHAPTER_CHANGED);
     }
 
     /**
@@ -72,7 +72,7 @@ public class TopicPublisher {
                 .operation(operation)
                 .build();
 
-        publishEvent(dto, Topic.CONTENT_CHANGED);
+        publishEvent(dto, DaprTopic.CONTENT_CHANGED);
     }
 
     /**
@@ -81,7 +81,7 @@ public class TopicPublisher {
      * @param userProgressLogEvent of the worked on content
      */
     public void notifyUserWorkedOnContent(final UserProgressLogEvent userProgressLogEvent) {
-        publishEvent(userProgressLogEvent, Topic.CONTENT_PROGRESSED);
+        publishEvent(userProgressLogEvent, DaprTopic.CONTENT_PROGRESSED);
     }
 
     /**
@@ -89,7 +89,7 @@ public class TopicPublisher {
      * @param userProgressLogEvent of the processed content
      */
     public void notifyUserProgressProcessed(final UserProgressLogEvent userProgressLogEvent) {
-        publishEvent(userProgressLogEvent, Topic.USER_PROGRESS_UPDATED);
+        publishEvent(userProgressLogEvent, DaprTopic.USER_PROGRESS_UPDATED);
     }
 
 }

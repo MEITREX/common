@@ -1,6 +1,6 @@
 package de.unistuttgart.iste.gits.common.dapr;
 
-public enum Topic {
+public enum DaprTopic {
     COURSE_CHANGED("course-changed"),
     CHAPTER_CHANGED("chapter-changed"),
 
@@ -13,7 +13,7 @@ public enum Topic {
 
     private final String topic;
 
-    Topic(final String topic) {
+    DaprTopic(final String topic) {
         this.topic = topic;
     }
 

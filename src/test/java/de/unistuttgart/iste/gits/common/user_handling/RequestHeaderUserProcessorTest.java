@@ -6,6 +6,8 @@ import org.springframework.http.HttpHeaders;
 
 import java.net.URI;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -30,23 +32,29 @@ class RequestHeaderUserProcessorTest {
                             "startDate": "2020-01-01T00:00:00.000Z",
                             "endDate": "2021-01-01T00:00:00.000Z"
                         }
-                    ]
+                    ],
+                    "realmRoles": []
                 }
                 """;
 
-        final LoggedInUser user = new LoggedInUser(
-                java.util.UUID.fromString("123e4567-e89b-12d3-a456-426614174000"),
-                "MyUserName",
-                "John",
-                "Doe",
-                List.of(new LoggedInUser.CourseMembership(
-                        java.util.UUID.fromString("123e4567-e89b-12d3-a456-426614174000"),
-                        LoggedInUser.UserRoleInCourse.STUDENT,
-                        true,
-                        OffsetDateTime.parse("2020-01-01T00:00:00.000Z"),
-                        OffsetDateTime.parse("2021-01-01T00:00:00.000Z"))
-                )
-        );
+        final LoggedInUser.CourseMembership courseMembership = LoggedInUser.CourseMembership.builder()
+                .courseId(java.util.UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
+                .published(true)
+                .role(LoggedInUser.UserRoleInCourse.STUDENT)
+                .startDate(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                .endDate(OffsetDateTime.parse("2021-01-01T00:00:00.000Z"))
+                .build();
+
+
+        final LoggedInUser user = LoggedInUser.builder()
+                .id(java.util.UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
+                .userName("MyUserName")
+                .firstName("John")
+                .lastName("Doe")
+                .courseMemberships(List.of(courseMembership))
+                .realmRoles(new HashSet<>())
+                .build();
+
 
         final HttpHeaders headers = new HttpHeaders();
         headers.add("CurrentUser", json);
