@@ -1,13 +1,17 @@
 package de.unistuttgart.iste.gits.common.user_handling;
 
 import de.unistuttgart.iste.gits.common.exception.NoAccessToCourseException;
+import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 /**
  * Static helper class which provides methods to validate that a user has access to a course.
  */
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class UserCourseAccessValidator {
     /**
      * Validates that a user has access to a course at the specified level (role).
@@ -56,4 +60,29 @@ public class UserCourseAccessValidator {
             }
         }
     }
+
+    /**
+     * Validates that a user has access to a list of courses at the specified level (role).
+     *
+     * @see #validateUserHasAccessToCourse(LoggedInUser, LoggedInUser.UserRoleInCourse, UUID)
+     */
+    public static void validateUserHasAccessToCourses(final LoggedInUser user,
+                                                      final LoggedInUser.UserRoleInCourse requiredMinimumRole,
+                                                      final List<UUID> courseIds) {
+        for (final UUID courseId : courseIds) {
+            validateUserHasAccessToCourse(user, requiredMinimumRole, courseId);
+        }
+    }
+
+    /**
+     * Validates that a user has access to a stream of courses at the specified level (role).
+     *
+     * @see #validateUserHasAccessToCourse(LoggedInUser, LoggedInUser.UserRoleInCourse, UUID)
+     */
+    public static void validateUserHasAccessToCourses(final LoggedInUser user,
+                                                      final LoggedInUser.UserRoleInCourse requiredMinimumRole,
+                                                      final Stream<UUID> courseIds) {
+        courseIds.forEach(courseId -> validateUserHasAccessToCourse(user, requiredMinimumRole, courseId));
+    }
+
 }
