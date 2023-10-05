@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
@@ -101,7 +102,7 @@ public class LoggedInUser {
          */
         private final int roleRanking;
     }
-
+    @Getter
     public enum RealmRole {
 
         COURSE_CREATOR("course-creator"),
@@ -116,6 +117,10 @@ public class LoggedInUser {
         public static Set<RealmRole> getRolesFromKeycloakRoleList(final List<String> keycloakRoleList) {
 
             return Arrays.stream(RealmRole.values()).filter(role -> keycloakRoleList.contains(role.keycloakRoleName)).collect(Collectors.toSet());
+        }
+
+        public static Set<String> getRoleStringsFromEnum(final Set<RealmRole> realmRoles) {
+            return realmRoles.stream().map(RealmRole::getKeycloakRoleName).collect(Collectors.toSet());
         }
     }
 }
