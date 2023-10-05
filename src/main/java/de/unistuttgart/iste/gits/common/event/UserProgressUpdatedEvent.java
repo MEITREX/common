@@ -1,8 +1,6 @@
 package de.unistuttgart.iste.gits.common.event;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -12,10 +10,12 @@ import java.util.UUID;
 @Data
 @Builder
 @AllArgsConstructor
-public class UserProgressLogEvent {
+public class UserProgressUpdatedEvent {
 
     private UUID userId;
     private UUID contentId;
+    private UUID chapterId;
+    private UUID courseId;
     private boolean success;
     private double correctness;
     private int hintsUsed;

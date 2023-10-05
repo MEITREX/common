@@ -1,7 +1,6 @@
 package de.unistuttgart.iste.gits.common.dapr;
 
-import de.unistuttgart.iste.gits.common.event.CrudOperation;
-import de.unistuttgart.iste.gits.common.event.UserProgressLogEvent;
+import de.unistuttgart.iste.gits.common.event.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -35,12 +34,12 @@ public class MockTopicPublisher extends TopicPublisher {
     }
 
     @Override
-    public void notifyUserWorkedOnContent(final UserProgressLogEvent userProgressLogEvent) {
-        log.info("notifyUserWorkedOnContent called with {}", userProgressLogEvent);
+    public void notifyUserWorkedOnContent(final ContentProgressedEvent contentProgressedEvent) {
+        log.info("notifyUserWorkedOnContent called with {}", contentProgressedEvent);
     }
 
     @Override
-    public void notifyUserProgressProcessed(final UserProgressLogEvent userProgressLogEvent) {
-        log.info("notifyUserProgressProcessed called with {}", userProgressLogEvent);
+    public void notifyUserProgressUpdated(final UserProgressUpdatedEvent userProgressUpdatedEvent) {
+        log.info("notifyUserProgressProcessed called with {}", userProgressUpdatedEvent);
     }
 }

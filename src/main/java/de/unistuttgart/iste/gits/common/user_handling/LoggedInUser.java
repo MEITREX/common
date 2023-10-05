@@ -1,16 +1,10 @@
 package de.unistuttgart.iste.gits.common.user_handling;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.OffsetDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -116,7 +110,9 @@ public class LoggedInUser {
 
         public static Set<RealmRole> getRolesFromKeycloakRoleList(final List<String> keycloakRoleList) {
 
-            return Arrays.stream(RealmRole.values()).filter(role -> keycloakRoleList.contains(role.keycloakRoleName)).collect(Collectors.toSet());
+            return Arrays.stream(RealmRole.values())
+                    .filter(role -> keycloakRoleList.contains(role.keycloakRoleName))
+                    .collect(Collectors.toSet());
         }
 
         public static Set<String> getRoleStringsFromEnum(final Set<RealmRole> realmRoles) {

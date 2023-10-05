@@ -78,18 +78,18 @@ public class TopicPublisher {
     /**
      * Method to notify when a user has worked on a content.
      *
-     * @param userProgressLogEvent of the worked on content
+     * @param contentProgressedEvent of the worked on content
      */
-    public void notifyUserWorkedOnContent(final UserProgressLogEvent userProgressLogEvent) {
-        publishEvent(userProgressLogEvent, DaprTopic.CONTENT_PROGRESSED);
+    public void notifyUserWorkedOnContent(final ContentProgressedEvent contentProgressedEvent) {
+        publishEvent(contentProgressedEvent, DaprTopic.CONTENT_PROGRESSED);
     }
 
     /**
      * Method to notify when the content service has processed the completion of a content worked on by a user.
-     * @param userProgressLogEvent of the processed content
+     * @param userProgressUpdatedEvent of the processed content
      */
-    public void notifyUserProgressProcessed(final UserProgressLogEvent userProgressLogEvent) {
-        publishEvent(userProgressLogEvent, DaprTopic.USER_PROGRESS_UPDATED);
+    public void notifyUserProgressUpdated(final UserProgressUpdatedEvent userProgressUpdatedEvent) {
+        publishEvent(userProgressUpdatedEvent, DaprTopic.USER_PROGRESS_UPDATED);
     }
 
 }
