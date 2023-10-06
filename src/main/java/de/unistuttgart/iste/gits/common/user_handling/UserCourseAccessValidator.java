@@ -27,6 +27,9 @@ public class UserCourseAccessValidator {
     public static void validateUserHasAccessToCourse(final LoggedInUser user,
                                                      final LoggedInUser.UserRoleInCourse requiredMinimumRole,
                                                      final UUID courseId) {
+        if (GlobalPermissionAccessValidator.validateIsSuperUser(user)) {
+            return;
+        }
         final LoggedInUser.CourseMembership courseMembership = user.getCourseMemberships().stream()
                 .filter(membership -> membership.getCourseId().equals(courseId))
                 .findFirst()
