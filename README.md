@@ -1,6 +1,6 @@
-# gits-common
+# meitrex-common
 
-This repository contains utility classes for GITS.
+This repository contains utility classes for MEITREX.
 
 ## How to add this repository to your project
 
