@@ -8,7 +8,7 @@ In the `settings.gradle` file, add the following line:
 
 ```groovy
 sourceControl {
-    gitRepository(uri('https://github.com/IT-REX-Platform/gits-common')) {
+    gitRepository(uri('https://github.com/MEITREX/common')) {
         producesModule('de.unistuttgart.iste.gits:gits-common')
     }
 }
