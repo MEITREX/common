@@ -1,14 +1,14 @@
 plugins {
 	id 'java'
 	id 'java-test-fixtures'
-	id 'org.springframework.boot' version '3.0.6'
-	id 'io.spring.dependency-management' version '1.1.0'
-	id "io.github.kobylynskyi.graphql.codegen" version "5.7.2"
+	id 'org.springframework.boot' version '3.+'
+	id 'io.spring.dependency-management' version '1.+'
+	id "io.github.kobylynskyi.graphql.codegen" version "5.+"
 }
 
 group = 'de.unistuttgart.iste.gits'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = '21'
 
 // Automatically generate DTOs from GraphQL schema:
 graphqlCodegen {
@@ -52,8 +52,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-graphql'
 	implementation 'jakarta.validation:jakarta.validation-api'
-	implementation 'io.dapr:dapr-sdk:1.9.0' // Dapr's core SDK with all features, except Actors.
-	implementation 'io.dapr:dapr-sdk-springboot:1.9.0' // Dapr's SDK integration with SpringBoot
+	implementation 'io.dapr:dapr-sdk:1.+' // Dapr's core SDK with all features, except Actors.
+	implementation 'io.dapr:dapr-sdk-springboot:1.+' // Dapr's SDK integration with SpringBoot
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
