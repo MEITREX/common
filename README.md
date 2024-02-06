@@ -9,7 +9,7 @@ In the `settings.gradle` file, add the following line:
 ```groovy
 sourceControl {
     gitRepository(uri('https://github.com/MEITREX/common')) {
-        producesModule('de.unistuttgart.iste.gits:gits-common')
+        producesModule('de.unistuttgart.iste.meitrex:meitrex-common')
     }
 }
 ```
@@ -17,7 +17,7 @@ sourceControl {
 In the `build.gradle` file, add the following dependency:
 
 ```groovy
-implementation "de.unistuttgart.iste.gits:gits-common:{version}"
+implementation "de.unistuttgart.iste.meitrex:meitrex-common:{version}"
 ```
 Replace `{version}` with the version you want to use. 
 You can find the versions in the tags of this repository.
