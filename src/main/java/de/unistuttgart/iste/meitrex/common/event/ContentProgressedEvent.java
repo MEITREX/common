@@ -2,6 +2,7 @@ package de.unistuttgart.iste.meitrex.common.event;
 
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -18,5 +19,6 @@ public class ContentProgressedEvent {
     private double correctness;
     private int hintsUsed;
     private Integer timeToComplete;
+    private List<Response> responses;
 
 }
