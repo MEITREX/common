@@ -6,6 +6,9 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * this class represents a users response to a given item on an assessment
+ */
 public class Response {
     public UUID itemId;
 
