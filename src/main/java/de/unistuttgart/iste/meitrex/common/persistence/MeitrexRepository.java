@@ -73,6 +73,16 @@ public interface MeitrexRepository<T extends IWithId<ID>, ID> extends JpaReposit
     }
 
     /**
+     * Same as {@link #findByIdOrThrow(Object)}, but depending on the context, the naming
+     * of this method might be more appropriate.
+     *
+     * @see #findByIdOrThrow(Object)
+     */
+    default T requireExists(final ID id) {
+        return findByIdOrThrow(id);
+    }
+
+    /**
      * Checks if an entity with the given id exists and throws an exception if it does.
      *
      * @param id The id of the entity to check.
