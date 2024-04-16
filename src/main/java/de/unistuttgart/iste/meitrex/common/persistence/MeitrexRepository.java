@@ -1,7 +1,8 @@
 package de.unistuttgart.iste.meitrex.common.persistence;
 
+import de.unistuttgart.iste.meitrex.common.exception.MeitrexNotFoundException;
+import de.unistuttgart.iste.meitrex.common.exception.ResourceAlreadyExistsException;
 import de.unistuttgart.iste.meitrex.common.util.MeitrexCollectionUtils;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public interface MeitrexRepository<T extends IWithId<ID>, ID> extends JpaReposit
 
     /**
      * Gets all entities with the given ids and preserves the order of the ids.
-     * If an entity is not found, an EntityNotFoundException is thrown.
+     * If an entity is not found, an MeitrexNotFoundException is thrown.
      *
      * @param ids The ids of the entities to get.
      * @return The entities with the given ids in order of the given ids.
@@ -50,12 +51,47 @@ public interface MeitrexRepository<T extends IWithId<ID>, ID> extends JpaReposit
         }
 
         if (!missingIds.isEmpty()) {
-            throw new EntityNotFoundException("Entities(s) with id(s) "
-                                              + missingIds.stream().map(ID::toString)
-                                                      .collect(Collectors.joining(", "))
-                                              + " not found");
+            String missingIdsString = missingIds.stream().map(ID::toString).collect(Collectors.joining(", "));
+
+            throw new MeitrexNotFoundException("Entities(s) with id(s) " + missingIdsString + " not found");
         }
 
         return allById;
+    }
+
+    /**
+     * Finds an entity by its id or throws a ResourceNotFoundException if the entity is not found.
+     * This method is similar to {@link JpaRepository#getReferenceById(Object)},
+     * but throws a custom MeitrexNotFoundException instead of an EntityNotFoundException.
+     *
+     * @param id The id of the entity to find.
+     * @return The entity with the given id.
+     * @throws MeitrexNotFoundException If the entity is not found.
+     */
+    default T findByIdOrThrow(final ID id) {
+        return findById(id).orElseThrow(() -> new MeitrexNotFoundException(getEntityName(), id));
+    }
+
+    /**
+     * Checks if an entity with the given id exists and throws an exception if it does.
+     *
+     * @param id The id of the entity to check.
+     * @throws ResourceAlreadyExistsException If the entity exists.
+     */
+    default void requireNotExists(final ID id) {
+        if (existsById(id)) {
+            throw new ResourceAlreadyExistsException(getEntityName(), id);
+        }
+    }
+
+    /**
+     * Gets the name of the entity for error messages.
+     * Sub-classes should override this method to provide a name.
+     * By default, the name is derived from the repository class name.
+     *
+     * @return The name of the entity.
+     */
+    default String getEntityName() {
+        return getClass().getSimpleName().replace("Repository", "");
     }
 }
