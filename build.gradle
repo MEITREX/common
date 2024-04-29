@@ -48,6 +48,7 @@ graphqlCodegen {
 	]
 	generateEqualsAndHashCode = true
 	generateToString = true
+	fieldsWithResolvers = ["@OnDemand"]
 }
 
 // Automatically generate GraphQL code on project build:
