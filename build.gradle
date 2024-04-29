@@ -4,7 +4,7 @@ plugins {
 	id 'org.springframework.boot' version '3.+'
 	id 'io.spring.dependency-management' version '1.+'
 	id "io.github.kobylynskyi.graphql.codegen" version "5.+"
-	id "org.sonarqube" version "4.+"
+	id "org.sonarqube" version "5.+"
 	id "jacoco"
 }
 
@@ -48,6 +48,7 @@ graphqlCodegen {
 	]
 	generateEqualsAndHashCode = true
 	generateToString = true
+	fieldsWithResolvers = ["@OnDemand"]
 }
 
 // Automatically generate GraphQL code on project build:
@@ -80,7 +81,7 @@ dependencies {
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation "org.mockito:mockito-core:3.+"
+	testImplementation "org.mockito:mockito-core:5.+"
 	testImplementation 'org.hamcrest:hamcrest:2.+'
 }
 
