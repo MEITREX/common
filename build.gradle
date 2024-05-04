@@ -75,6 +75,7 @@ dependencies {
 	implementation 'io.dapr:dapr-sdk:1.+' // Dapr's core SDK with all features, except Actors.
 	implementation 'io.dapr:dapr-sdk-springboot:1.+' // Dapr's SDK integration with SpringBoot
 	implementation 'org.modelmapper:modelmapper:3.+'
+	implementation "io.github.kobylynskyi:graphql-java-codegen:5.+"
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
