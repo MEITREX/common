@@ -68,6 +68,32 @@ class GraphQlRequestExecutorTest {
     }
 
     @Test
+    void testRetrieveListResponse() {
+        // Arrange
+        GraphQLOperationRequest request = getMockRequest();
+        GraphQLResponseProjection projection = getMockProjection();
+
+        List<Object> expectedResponse = List.of(new Object(), new Object());
+        ClientGraphQlResponse response = getMockResponse(expectedResponse);
+
+        WebGraphQlClient graphQlClient = getMockGraphQlClient(response);
+
+        GraphQlRequestExecutor executor = new GraphQlRequestExecutor(() -> graphQlClient);
+
+        // Act
+        Mono<List<Object>> resultMono = executor.request(request)
+                .projectTo(Object.class, projection)
+                .retrieveList();
+
+        // Assert
+        List<Object> result = resultMono.block();
+        assertThat(result, sameInstance(expectedResponse));
+
+        // Verify
+        Mockito.verify(graphQlClient).document(any(String.class));
+    }
+
+    @Test
     void testErrors() {
         // Arrange
         GraphQLOperationRequest request = getMockRequest();
@@ -108,6 +134,14 @@ class GraphQlRequestExecutorTest {
         ClientResponseField expectedField = mock(ClientResponseField.class);
         when(response.field(any())).thenReturn(expectedField);
         when(expectedField.toEntity(Object.class)).thenReturn(expectedResponse);
+        return response;
+    }
+
+    private static @NotNull ClientGraphQlResponse getMockResponse(List<Object> expectedResponse) {
+        ClientGraphQlResponse response = mock(ClientGraphQlResponse.class);
+        ClientResponseField expectedField = mock(ClientResponseField.class);
+        when(response.field(any())).thenReturn(expectedField);
+        when(expectedField.toEntityList(Object.class)).thenReturn(expectedResponse);
         return response;
     }
 
