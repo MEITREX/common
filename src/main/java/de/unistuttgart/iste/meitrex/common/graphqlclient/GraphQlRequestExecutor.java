@@ -11,6 +11,7 @@ import org.springframework.graphql.client.ClientGraphQlResponse;
 import org.springframework.graphql.client.WebGraphQlClient;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -110,11 +111,36 @@ public class GraphQlRequestExecutor {
                     });
         }
 
+        /**
+         * Retrieve the response from the server as a list.
+         *
+         * @return A Mono that will emit the response
+         */
+        public Mono<List<T>> retrieveList() {
+            GraphQLRequest graphQlRequest = new GraphQLRequest(request, projection);
+
+            return graphQlClientSupplier.get()
+                    .document(graphQlRequest.toQueryString())
+                    .execute()
+                    .handle((response, sink) -> {
+                        if (response.getErrors().isEmpty()) {
+                            sink.next(extractResponseDataList(response));
+                        } else {
+                            sink.error(toGraphQlException(response));
+                        }
+                    });
+        }
+
         private Optional<T> extractResponseData(ClientGraphQlResponse response) {
             String retrievalName = request.getAlias() != null ? request.getAlias() : request.getOperationName();
             T result = response.field(retrievalName).toEntity(responseType);
 
             return Optional.ofNullable(result);
+        }
+
+        private List<T> extractResponseDataList(ClientGraphQlResponse response) {
+            String retrievalName = request.getAlias() != null ? request.getAlias() : request.getOperationName();
+            return response.field(retrievalName).toEntityList(responseType);
         }
 
         private static GraphqlErrorException toGraphQlException(ClientGraphQlResponse response) {
