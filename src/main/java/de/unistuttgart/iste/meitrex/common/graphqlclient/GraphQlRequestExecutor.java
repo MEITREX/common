@@ -75,7 +75,7 @@ public class GraphQlRequestExecutor {
          * @return An object that can be used to retrieve the response
          */
         public <T> ProjectionSpecification<T> projectTo(Class<T> responseType, GraphQLResponseProjection projection) {
-            return new ProjectionSpecification<>(request, projection, responseType, false);
+            return new ProjectionSpecification<>(request, projection, responseType);
         }
     }
 
@@ -89,7 +89,6 @@ public class GraphQlRequestExecutor {
         private final GraphQLOperationRequest request;
         private final GraphQLResponseProjection projection;
         private final Class<T> responseType;
-        private final boolean isList;
 
         /**
          * Retrieve the response from the server.
