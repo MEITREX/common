@@ -7,35 +7,11 @@ import org.modelmapper.ModelMapper;
 public class AbstractCrudServiceTestImpl
         extends AbstractCrudService<Long, AbstractCrudServiceTestImpl.TestEntity, AbstractCrudServiceTestImpl.TestDto> {
 
-    private MeitrexRepository<TestEntity, Long> repository;
-    private ModelMapper modelMapper;
-
     public AbstractCrudServiceTestImpl(MeitrexRepository<TestEntity, Long> repository) {
-        this.repository = repository;
-        this.modelMapper = new ModelMapper();
-        modelMapper.createTypeMap(TestInputDto.class, TestEntity.class)
+        super(repository, new ModelMapper(), TestEntity.class, TestDto.class);
+        getModelMapper().createTypeMap(TestInputDto.class, TestEntity.class)
                 .addMappings(mapper -> mapper.skip(TestEntity::setId))
                 .addMappings(mapper -> mapper.map(TestInputDto::getInputName, TestEntity::setName));
-    }
-
-    @Override
-    protected Class<TestEntity> getEntityClass() {
-        return TestEntity.class;
-    }
-
-    @Override
-    protected Class<TestDto> getDtoClass() {
-        return TestDto.class;
-    }
-
-    @Override
-    protected ModelMapper getModelMapper() {
-        return modelMapper;
-    }
-
-    @Override
-    protected MeitrexRepository<TestEntity, Long> getRepository() {
-        return repository;
     }
 
     public static class TestEntity implements IWithId<Long> {

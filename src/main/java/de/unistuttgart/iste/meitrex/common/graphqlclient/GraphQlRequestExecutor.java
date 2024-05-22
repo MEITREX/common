@@ -90,17 +90,21 @@ public class GraphQlRequestExecutor {
         private final GraphQLResponseProjection projection;
         private final Class<T> responseType;
 
+        public Mono<ClientGraphQlResponse> execute() {
+            GraphQLRequest graphQlRequest = new GraphQLRequest(request, projection);
+
+            return graphQlClientSupplier.get()
+                    .document(graphQlRequest.toQueryString())
+                    .execute();
+        }
+
         /**
          * Retrieve the response from the server.
          *
          * @return A Mono that will emit the response
          */
         public Mono<T> retrieve() {
-            GraphQLRequest graphQlRequest = new GraphQLRequest(request, projection);
-
-            return graphQlClientSupplier.get()
-                    .document(graphQlRequest.toQueryString())
-                    .execute()
+            return execute()
                     .handle((response, sink) -> {
                         if (response.getErrors().isEmpty()) {
                             // map to the response type
@@ -117,11 +121,7 @@ public class GraphQlRequestExecutor {
          * @return A Mono that will emit the response
          */
         public Mono<List<T>> retrieveList() {
-            GraphQLRequest graphQlRequest = new GraphQLRequest(request, projection);
-
-            return graphQlClientSupplier.get()
-                    .document(graphQlRequest.toQueryString())
-                    .execute()
+            return execute()
                     .handle((response, sink) -> {
                         if (response.getErrors().isEmpty()) {
                             sink.next(extractResponseDataList(response));

@@ -3,6 +3,8 @@ package de.unistuttgart.iste.meitrex.common.service;
 import de.unistuttgart.iste.meitrex.common.exception.MeitrexNotFoundException;
 import de.unistuttgart.iste.meitrex.common.persistence.IWithId;
 import de.unistuttgart.iste.meitrex.common.persistence.MeitrexRepository;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
@@ -18,32 +20,30 @@ import java.util.function.Supplier;
  * @param <E> the type of the entity, e.g., UserEntity
  * @param <D> the type of the DTO, e.g., User
  */
+@Getter(AccessLevel.PROTECTED)
 public abstract class AbstractCrudService<I, E extends IWithId<I>, D> {
 
-    /**
-     * @return the class of the entity, e.g., UserEntity.class
-     */
-    protected abstract Class<E> getEntityClass();
+    private final MeitrexRepository<E, I> repository;
+    private final ModelMapper modelMapper;
+    private final Class<E> entityClass;
+    private final Class<D> dtoClass;
 
     /**
-     * @return the class of the DTO, e.g., User.class
+     * @param repository  used to access the entities
+     * @param modelMapper used to map between entities and DTOs. The model mapper should be set up to map
+     *                    between the entity and DTO classes,and between input classes and the entity class.
+     * @param entityClass the class of the entity, e.g., UserEntity.class
+     * @param dtoClass    the class of the DTO, e.g., User.class
      */
-    protected abstract Class<D> getDtoClass();
-
-    /**
-     * Get the model mapper used to map between entities and DTOs.
-     * This method should return a pre-configured model mapper.
-     * The model mapper should be set up to map between the entity and DTO classes,
-     * and between input classes and the entity class.
-     *
-     * @return the model mapper used to map between entities and DTOs
-     */
-    protected abstract ModelMapper getModelMapper();
-
-    /**
-     * @return the repository used to access the entities
-     */
-    protected abstract MeitrexRepository<E, I> getRepository();
+    protected AbstractCrudService(MeitrexRepository<E, I> repository,
+                                  ModelMapper modelMapper,
+                                  Class<E> entityClass,
+                                  Class<D> dtoClass) {
+        this.repository = repository;
+        this.modelMapper = modelMapper;
+        this.entityClass = entityClass;
+        this.dtoClass = dtoClass;
+    }
 
     /**
      * Get all entities from the repository and convert them to DTOs.
