@@ -176,9 +176,12 @@ public abstract class AbstractCrudService<I, E extends IWithId<I>, D> {
      * Converts an entity to a DTO.
      *
      * @param entity the entity to convert
-     * @return the entity as a DTO
+     * @return the entity as a DTO or null if the entity is null
      */
     protected D convertToDto(final E entity) {
+        if (entity == null) {
+            return null;
+        }
         return getModelMapper().map(entity, getDtoClass());
     }
 

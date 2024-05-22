@@ -2,7 +2,10 @@ package de.unistuttgart.iste.meitrex.common.service;
 
 import de.unistuttgart.iste.meitrex.common.exception.MeitrexNotFoundException;
 import de.unistuttgart.iste.meitrex.common.persistence.MeitrexRepository;
-import de.unistuttgart.iste.meitrex.common.service.AbstractCrudServiceTestImpl.*;
+import de.unistuttgart.iste.meitrex.common.service.AbstractCrudServiceTestImpl.TestDto;
+import de.unistuttgart.iste.meitrex.common.service.AbstractCrudServiceTestImpl.TestEntity;
+import de.unistuttgart.iste.meitrex.common.service.AbstractCrudServiceTestImpl.TestInputDto;
+import de.unistuttgart.iste.meitrex.common.service.AbstractCrudServiceTestImpl.TestRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -11,10 +14,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
 class AbstractCrudServiceTest {
@@ -216,5 +219,12 @@ class AbstractCrudServiceTest {
 
         verify(repository, times(1)).existsById(id);
         verify(repository, never()).deleteById(id);
+    }
+
+    @Test
+    void testConvertToDtoNull() {
+        TestDto result = service.convertToDto(null);
+
+        assertThat(result, is(nullValue()));
     }
 }
