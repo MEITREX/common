@@ -6,6 +6,7 @@ import com.kobylynskyi.graphql.codegen.model.graphql.GraphQLResponseProjection;
 import graphql.ErrorType;
 import graphql.GraphqlErrorException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.graphql.ResponseError;
 import org.springframework.graphql.client.ClientGraphQlResponse;
 import org.springframework.graphql.client.WebGraphQlClient;
@@ -35,6 +36,7 @@ import java.util.function.Supplier;
  *                 .subscribe(product -> // do something with the product);
  * </pre>
  */
+@Slf4j
 public class GraphQlRequestExecutor {
 
     private final Supplier<WebGraphQlClient> graphQlClientSupplier;
@@ -92,9 +94,12 @@ public class GraphQlRequestExecutor {
 
         public Mono<ClientGraphQlResponse> execute() {
             GraphQLRequest graphQlRequest = new GraphQLRequest(request, projection);
+            String query = graphQlRequest.toQueryString();
+
+            log.info("Executing GraphQL request: {}", query);
 
             return graphQlClientSupplier.get()
-                    .document(graphQlRequest.toQueryString())
+                    .document(query)
                     .execute();
         }
 
