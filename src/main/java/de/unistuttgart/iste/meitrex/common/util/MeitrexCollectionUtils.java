@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class MeitrexCollectionUtils {
@@ -27,6 +28,28 @@ public class MeitrexCollectionUtils {
      */
     public static <T> int countAsInt(final Collection<? extends T> collection, final Predicate<? super T> filter) {
         return (int) count(collection, filter);
+    }
+
+    /**
+     * Returns a stateful filter that filters out elements that it has already seen based on a key.
+     * This is similar to {@link Stream#distinct()} but allows to filter by a key extracted from the elements.
+     * Usage:
+     * <pre>{@code
+     * List<Person> persons = ...
+     * List<Person> distinctByName = persons.stream()
+     *    .filter(distinctByKey(Person::getName))
+     *    .toList();
+     * }</pre>
+     *
+     * @param keyExtractor the function to extract the key from the elements
+     * @param <T>          the type of the elements
+     * @param <K>          the type of the key.
+     *                     Should implement {@link Object#equals(Object)} and {@link Object#hashCode()}.
+     * @return the filter
+     */
+    public static <T, K> Predicate<T> distinctByKey(Function<? super T, K> keyExtractor) {
+        Set<K> seen = new HashSet<>();
+        return t -> seen.add(keyExtractor.apply(t)); // returns true if the key is new
     }
 
     /**
