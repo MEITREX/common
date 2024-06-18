@@ -34,6 +34,10 @@ public class MockTopicPublisher extends TopicPublisher {
     }
 
     @Override
+    public void notifyItemChanges(final UUID itemId, final CrudOperation operation){
+        log.info("notifyItemChanges called with {} and {}", itemId,operation);
+    }
+    @Override
     public void notifyUserWorkedOnContent(final ContentProgressedEvent contentProgressedEvent) {
         log.info("notifyUserWorkedOnContent called with {}", contentProgressedEvent);
     }
@@ -42,4 +46,6 @@ public class MockTopicPublisher extends TopicPublisher {
     public void notifyUserProgressUpdated(final UserProgressUpdatedEvent userProgressUpdatedEvent) {
         log.info("notifyUserProgressProcessed called with {}", userProgressUpdatedEvent);
     }
+
+
 }

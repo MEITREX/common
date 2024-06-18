@@ -4,6 +4,7 @@ import de.unistuttgart.iste.meitrex.common.event.*;
 import io.dapr.client.DaprClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
 import java.util.List;
 import java.util.UUID;
@@ -73,6 +74,20 @@ public class TopicPublisher {
                 .build();
 
         publishEvent(dto, DaprTopic.CONTENT_CHANGED);
+    }
+
+    /**
+     * Method to notify when there are changes to an item
+     * @param itemId of the item that has changed
+     * @param operation that was performed {@link CrudOperation}
+     */
+    public void notifyItemChanges(final UUID itemId, final CrudOperation operation){
+        final ItemChangeEvent dto = ItemChangeEvent.builder()
+                .itemId(itemId)
+                .operation(operation)
+                .build();
+
+        publishEvent(dto, DaprTopic.ITEM_CHANGED);
     }
 
     /**
