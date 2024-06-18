@@ -38,15 +38,19 @@ public class ExceptionToGraphQlErrorConverter {
                 .build();
     }
 
-    private static ErrorType getErrorType(final Throwable ex) {
-        // HINT we cannot use switch expressions here because JDK 17 does not support them yet
-        if (ex instanceof EntityNotFoundException) {
-            return ErrorType.DataFetchingException;
-        } else if (ex.getClass().getSimpleName().contains("ValidationException")) {
+    private static ErrorClassification getErrorType(final Throwable ex) {
+        // special case for validation exceptions since we don't want to add the full graphql dependency
+        // just for the exception type
+        if (ex.getClass().getSimpleName().contains("ValidationException")) {
             return ErrorType.ValidationError;
         }
-        // HINT add more error types here
-        return ErrorType.ExecutionAborted;
+
+        return switch (ex) {
+            case EntityNotFoundException ignored -> ErrorType.DataFetchingException;
+            case GraphqlErrorException graphQLError -> graphQLError.getErrorType();
+            case ExceptionWithGraphQlErrorType graphQLError -> graphQLError.getErrorType();
+            default -> ErrorType.ExecutionAborted;
+        };
     }
 
     /**
@@ -64,6 +68,10 @@ public class ExceptionToGraphQlErrorConverter {
         // add basic stack trace information
         if (ex.getStackTrace().length > 0) {
             extensions.put("thrownBy", ex.getStackTrace()[0].toString());
+        }
+
+        if (ex instanceof GraphqlErrorException graphQLError) {
+            extensions.putAll(graphQLError.getExtensions());
         }
 
         return extensions;

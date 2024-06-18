@@ -13,10 +13,12 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
       - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v2
+        uses: gradle/wrapper-validation-action@v3
       - name: Run chmod to make gradlew executable
         run:  chmod +x gradlew
       - name: Execute tests
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         uses: gradle/gradle-build-action@v3
         with:
-          arguments: cleanTest test
+          arguments: cleanTest test jacocoTestReport sonar

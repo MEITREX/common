@@ -6,7 +6,9 @@ import org.springframework.http.HttpHeaders;
 
 import java.net.URI;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -59,7 +61,7 @@ class RequestHeaderUserProcessorTest {
         // ugly way of instantiating a WebGraphQlRequest. We have to add a key-value pair with query as a key to the
         // body so the constructor of WebGraphQlRequest doesn't complain.
         final WebGraphQlRequest request = new WebGraphQlRequest(
-                URI.create(""), headers, null, Map.of(), Map.of("query", "a"), "", null);
+                URI.create(""), headers, null, null, Map.of(), Map.of("query", "a"), "", null);
 
         RequestHeaderUserProcessor.process(request);
 
@@ -75,7 +77,7 @@ class RequestHeaderUserProcessorTest {
         // ugly way of instantiating a WebGraphQlRequest. We have to add a key-value pair with query as a key to the
         // body so the constructor of WebGraphQlRequest doesn't complain.
         final WebGraphQlRequest request = new WebGraphQlRequest(
-                URI.create(""), headers, null, Map.of(), Map.of("query", "a"), "", null);
+                URI.create(""), headers, null, null, Map.of(), Map.of("query", "a"), "", null);
 
         RequestHeaderUserProcessor.process(request);
 
@@ -99,7 +101,7 @@ class RequestHeaderUserProcessorTest {
         // ugly way of instantiating a WebGraphQlRequest. We have to add a key-value pair with query as a key to the
         // body so the constructor of WebGraphQlRequest doesn't complain.
         final WebGraphQlRequest request = new WebGraphQlRequest(
-                URI.create(""), headers, null, Map.of(), Map.of("query", "a"), "", null);
+                URI.create(""), headers, null, null, Map.of(), Map.of("query", "a"), "", null);
 
         assertThatThrownBy(() -> RequestHeaderUserProcessor.process(request))
                 .isInstanceOf(IllegalArgumentException.class);
