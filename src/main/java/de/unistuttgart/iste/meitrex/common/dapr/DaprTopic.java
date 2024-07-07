@@ -8,8 +8,9 @@ public enum DaprTopic {
 
     CONTENT_CHANGED("content-changed"),
 
-    USER_PROGRESS_UPDATED("user-progress-updated");
+    USER_PROGRESS_UPDATED("user-progress-updated"),
 
+    ITEM_CHANGED("item-changed");
 
     private final String topic;
 
