@@ -10,6 +10,8 @@ public enum DaprTopic {
 
     USER_PROGRESS_UPDATED("user-progress-updated"),
 
+    MEDIA_RECORD_FILE_CREATED("media-record-file-created"),
+
     ITEM_CHANGED("item-changed");
 
     private final String topic;
