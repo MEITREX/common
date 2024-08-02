@@ -107,4 +107,11 @@ public class TopicPublisher {
         publishEvent(userProgressUpdatedEvent, DaprTopic.USER_PROGRESS_UPDATED);
     }
 
+    /**
+     * Method to notify when a file has been uploaded to MinIO for a media record.
+     * @param mediaRecordFileCreatedEvent of the uploaded file
+     */
+    public void notifyMediaRecordFileCreated(final MediaRecordFileCreatedEvent mediaRecordFileCreatedEvent) {
+        publishEvent(mediaRecordFileCreatedEvent, DaprTopic.MEDIA_RECORD_FILE_CREATED);
+    }
 }
