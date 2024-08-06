@@ -114,4 +114,12 @@ public class TopicPublisher {
     public void notifyMediaRecordFileCreated(final MediaRecordFileCreatedEvent mediaRecordFileCreatedEvent) {
         publishEvent(mediaRecordFileCreatedEvent, DaprTopic.MEDIA_RECORD_FILE_CREATED);
     }
+
+    /**
+     * Method to notify when a media record has been deleted.
+     * @param mediaRecordDeletedEvent of the deleted media record
+     */
+    public void notifyMediaRecordDeleted(final MediaRecordDeletedEvent mediaRecordDeletedEvent) {
+        publishEvent(mediaRecordDeletedEvent, DaprTopic.MEDIA_RECORD_DELETED);
+    }
 }
