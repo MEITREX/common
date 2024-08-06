@@ -12,8 +12,6 @@ public enum DaprTopic {
 
     MEDIA_RECORD_FILE_CREATED("media-record-file-created"),
 
-    MEDIA_RECORD_DELETED("media-record-deleted"),
-
     ITEM_CHANGED("item-changed");
 
     private final String topic;
