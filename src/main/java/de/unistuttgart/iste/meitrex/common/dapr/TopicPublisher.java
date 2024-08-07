@@ -122,4 +122,12 @@ public class TopicPublisher {
     public void notifyMediaRecordDeleted(final MediaRecordDeletedEvent mediaRecordDeletedEvent) {
         publishEvent(mediaRecordDeletedEvent, DaprTopic.MEDIA_RECORD_DELETED);
     }
+
+    /**
+     * Method to notify when media record links for a media content were set.
+     * @param event of the content where links were set.
+     */
+    public void notifyContentMediaRecordLinksSet(final ContentMediaRecordLinksSetEvent event) {
+        publishEvent(event, DaprTopic.CONTENT_MEDIA_RECORD_LINKS_SET);
+    }
 }

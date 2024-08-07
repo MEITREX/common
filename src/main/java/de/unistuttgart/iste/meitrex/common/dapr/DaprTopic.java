@@ -14,6 +14,8 @@ public enum DaprTopic {
 
     MEDIA_RECORD_DELETED("media-record-deleted"),
 
+    CONTENT_MEDIA_RECORD_LINKS_SET("content-media-record-links-set"),
+
     ITEM_CHANGED("item-changed");
 
     private final String topic;
