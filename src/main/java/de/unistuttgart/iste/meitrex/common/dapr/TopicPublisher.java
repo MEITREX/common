@@ -4,7 +4,6 @@ import de.unistuttgart.iste.meitrex.common.event.*;
 import io.dapr.client.DaprClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
 import java.util.List;
 import java.util.UUID;
@@ -129,5 +128,9 @@ public class TopicPublisher {
      */
     public void notifyContentMediaRecordLinksSet(final ContentMediaRecordLinksSetEvent event) {
         publishEvent(event, DaprTopic.CONTENT_MEDIA_RECORD_LINKS_SET);
+    }
+
+    public void notifyAssessmentContentMutated(final AssessmentContentMutatedEvent event) {
+        publishEvent(event, DaprTopic.ASSESSMENT_CONTENT_MUTATED);
     }
 }

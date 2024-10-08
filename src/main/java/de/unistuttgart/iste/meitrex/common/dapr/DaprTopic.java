@@ -16,7 +16,9 @@ public enum DaprTopic {
 
     CONTENT_MEDIA_RECORD_LINKS_SET("content-media-record-links-set"),
 
-    ITEM_CHANGED("item-changed");
+    ITEM_CHANGED("item-changed"),
+
+    ASSESSMENT_CONTENT_MUTATED("assessment-content-mutated");
 
     private final String topic;
 
