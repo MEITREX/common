@@ -130,7 +130,7 @@ public class TopicPublisher {
         publishEvent(event, DaprTopic.CONTENT_MEDIA_RECORD_LINKS_SET);
     }
 
-    public void notifyAssessmentMutated(final AssessmentContentMutatedEvent event) {
+    public void notifyAssessmentContentMutated(final AssessmentContentMutatedEvent event) {
         publishEvent(event, DaprTopic.ASSESSMENT_CONTENT_MUTATED);
     }
 }
