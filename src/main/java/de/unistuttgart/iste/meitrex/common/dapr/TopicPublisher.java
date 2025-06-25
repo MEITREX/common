@@ -133,4 +133,8 @@ public class TopicPublisher {
     public void notifyAssessmentContentMutated(final AssessmentContentMutatedEvent event) {
         publishEvent(event, DaprTopic.ASSESSMENT_CONTENT_MUTATED);
     }
+
+    public void notifyForumActivity(final ForumActivityEvent event) {
+        publishEvent(event, DaprTopic.FORUM_ACTIVITY);
+    }
 }

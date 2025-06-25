@@ -1,6 +1,7 @@
 package de.unistuttgart.iste.meitrex.common.dapr;
 
 public enum DaprTopic {
+
     COURSE_CHANGED("course-changed"),
     CHAPTER_CHANGED("chapter-changed"),
 
@@ -18,7 +19,9 @@ public enum DaprTopic {
 
     ITEM_CHANGED("item-changed"),
 
-    ASSESSMENT_CONTENT_MUTATED("assessment-content-mutated");
+    ASSESSMENT_CONTENT_MUTATED("assessment-content-mutated"),
+
+    FORUM_ACTIVITY("forum-activity");
 
     private final String topic;
 

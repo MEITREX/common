@@ -47,5 +47,8 @@ public class MockTopicPublisher extends TopicPublisher {
         log.info("notifyUserProgressProcessed called with {}", userProgressUpdatedEvent);
     }
 
-
+    @Override
+    public void notifyForumActivity(final ForumActivityEvent forumActivityEvent) {
+        log.info("notifyForumActivity called with {}", forumActivityEvent);
+    }
 }
