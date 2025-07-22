@@ -26,7 +26,7 @@ public class LoggedInUser {
                         @JsonProperty("userName") final String userName,
                         @JsonProperty("firstName") final String firstName,
                         @JsonProperty("lastName") final String lastName,
-                        @JsonProperty("nickName") final String nickname,
+                        @JsonProperty("nickname") final String nickname,
                         @JsonProperty("courseMemberships") final List<CourseMembership> courseMemberships,
                         @JsonProperty("realmRoles") final List<String> realmRoles) {
         this.id = id;
