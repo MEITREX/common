@@ -18,7 +18,7 @@ public class LoggedInUser {
     private final String userName;
     private final String firstName;
     private final String lastName;
-    private final String nickName;
+    private final String nickname;
     private final List<CourseMembership> courseMemberships;
     private final Set<RealmRole> realmRoles;
 
@@ -26,14 +26,14 @@ public class LoggedInUser {
                         @JsonProperty("userName") final String userName,
                         @JsonProperty("firstName") final String firstName,
                         @JsonProperty("lastName") final String lastName,
-                        @JsonProperty("nickName") final String nickName,
+                        @JsonProperty("nickName") final String nickname,
                         @JsonProperty("courseMemberships") final List<CourseMembership> courseMemberships,
                         @JsonProperty("realmRoles") final List<String> realmRoles) {
         this.id = id;
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.courseMemberships = courseMemberships;
         this.realmRoles = RealmRole.getRolesFromKeycloakRoleList(realmRoles);
     }
