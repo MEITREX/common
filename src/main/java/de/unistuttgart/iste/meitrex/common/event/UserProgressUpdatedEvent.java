@@ -24,4 +24,6 @@ public class UserProgressUpdatedEvent {
     private Integer timeToComplete;
     private List<ItemResponse> responses;
 
+
+
 }
