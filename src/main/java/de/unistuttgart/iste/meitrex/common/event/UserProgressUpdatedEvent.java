@@ -13,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserProgressUpdatedEvent {
 
+    private Long sequenceNo;
     private UUID userId;
     private UUID contentId;
     private UUID chapterId;
