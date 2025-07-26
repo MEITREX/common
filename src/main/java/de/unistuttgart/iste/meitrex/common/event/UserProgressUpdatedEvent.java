@@ -18,6 +18,7 @@ public class UserProgressUpdatedEvent {
     private UUID contentId;
     private UUID chapterId;
     private UUID courseId;
+    private int attempt;
     private boolean success;
     private double correctness;
     private int hintsUsed;
