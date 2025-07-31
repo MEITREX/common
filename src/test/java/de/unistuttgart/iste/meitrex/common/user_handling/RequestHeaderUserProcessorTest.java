@@ -23,6 +23,7 @@ class RequestHeaderUserProcessorTest {
                     "userName": "MyUserName",
                     "firstName": "John",
                     "lastName": "Doe",
+                    "nickname": "Nickname",
                     "courseMemberships": [
                         {
                             "courseId": "123e4567-e89b-12d3-a456-426614174000",
@@ -50,6 +51,7 @@ class RequestHeaderUserProcessorTest {
                 .userName("MyUserName")
                 .firstName("John")
                 .lastName("Doe")
+                .nickname("Nickname")
                 .courseMemberships(List.of(courseMembership))
                 .realmRoles(new HashSet<>())
                 .build();
@@ -91,7 +93,8 @@ class RequestHeaderUserProcessorTest {
                     "id1": "123e4567-e89b-12d3-a456-426614174000",
                     "userName": "MyUserName",
                     "firstName": "John",
-                    "lastName": "Doe"
+                    "lastName": "Doe",
+                    "nickname": "Nickname",
                 }
                 """;
 
