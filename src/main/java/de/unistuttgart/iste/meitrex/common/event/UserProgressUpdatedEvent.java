@@ -13,14 +13,18 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserProgressUpdatedEvent {
 
+    private Long sequenceNo;
     private UUID userId;
     private UUID contentId;
     private UUID chapterId;
     private UUID courseId;
+    private int attempt;
     private boolean success;
     private double correctness;
     private int hintsUsed;
     private Integer timeToComplete;
     private List<ItemResponse> responses;
+
+
 
 }
