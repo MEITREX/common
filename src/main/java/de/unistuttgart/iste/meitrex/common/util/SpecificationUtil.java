@@ -1,7 +1,11 @@
 package de.unistuttgart.iste.meitrex.common.util;
 
-import de.unistuttgart.iste.meitrex.generated.dto.*;
-import jakarta.persistence.criteria.*;
+import de.unistuttgart.iste.meitrex.generated.dto.DateTimeFilter;
+import de.unistuttgart.iste.meitrex.generated.dto.IntFilter;
+import de.unistuttgart.iste.meitrex.generated.dto.StringFilter;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 
@@ -45,7 +49,8 @@ public class SpecificationUtil {
         }
 
         return Specification
-                .<T>where(stringEqualTo(field, stringFilter.getEquals(), stringFilter.getIgnoreCase()))
+                .<T>unrestricted()
+                .and(stringEqualTo(field, stringFilter.getEquals(), stringFilter.getIgnoreCase()))
                 .and(contains(field, stringFilter.getContains(), stringFilter.getIgnoreCase()));
     }
 
