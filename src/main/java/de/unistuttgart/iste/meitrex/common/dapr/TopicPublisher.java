@@ -134,7 +134,20 @@ public class TopicPublisher {
         publishEvent(event, DaprTopic.ASSESSMENT_CONTENT_MUTATED);
     }
 
+    /**
+     * Method to notify when a user posted something in the forum
+     * @param event of the forum and the activity the user did in the forum
+     */
     public void notifyForumActivity(final ForumActivityEvent event) {
+        publishEvent(event, DaprTopic.FORUM_ACTIVITY);
+    }
+
+
+    /**
+     * Method to notify when a user completed an achievement
+     * @param event of the achievement that was completed and the user that completed the achievement
+     */
+    public void notifyAchievementCompleted(final AchievementCompletedEvent event) {
         publishEvent(event, DaprTopic.FORUM_ACTIVITY);
     }
 }
