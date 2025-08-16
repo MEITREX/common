@@ -51,4 +51,9 @@ public class MockTopicPublisher extends TopicPublisher {
     public void notifyForumActivity(final ForumActivityEvent forumActivityEvent) {
         log.info("notifyForumActivity called with {}", forumActivityEvent);
     }
+
+    @Override
+    public void notifyAchievementCompleted(final AchievementCompletedEvent achievementCompletedEvent) {
+        log.info("notifyAchievementCompleted called with {}", achievementCompletedEvent);
+    }
 }
