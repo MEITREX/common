@@ -90,3 +90,14 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+// Disable bootJar since this is a library, not an executable app
+bootJar {
+    enabled = false
+}
+
+// Enable normal jar
+jar {
+    enabled = true
+    from sourceSets.main.resources
+}
