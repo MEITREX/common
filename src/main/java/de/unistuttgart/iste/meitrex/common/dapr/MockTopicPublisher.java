@@ -1,6 +1,7 @@
 package de.unistuttgart.iste.meitrex.common.dapr;
 
 import de.unistuttgart.iste.meitrex.common.event.*;
+import de.unistuttgart.iste.meitrex.common.event.skilllevels.UserSkillLevelChangedEvent;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -47,6 +48,38 @@ public class MockTopicPublisher extends TopicPublisher {
         log.info("notifyUserProgressProcessed called with {}", userProgressUpdatedEvent);
     }
 
+    /**
+     * Method to notify when a file has been uploaded to MinIO for a media record.
+     * @param mediaRecordFileCreatedEvent of the uploaded file
+     */
+    @Override
+    public void notifyMediaRecordFileCreated(final MediaRecordFileCreatedEvent mediaRecordFileCreatedEvent) {
+        log.info("notifyMediaRecordFileCreated called with {}", mediaRecordFileCreatedEvent);
+    }
+
+    /**
+     * Method to notify when a media record has been deleted.
+     * @param mediaRecordDeletedEvent of the deleted media record
+     */
+    @Override
+    public void notifyMediaRecordDeleted(final MediaRecordDeletedEvent mediaRecordDeletedEvent) {
+        log.info("notifyMediaRecordDeleted called with {}", mediaRecordDeletedEvent);
+    }
+
+    /**
+     * Method to notify when media record links for a media content were set.
+     * @param event of the content where links were set.
+     */
+    @Override
+    public void notifyContentMediaRecordLinksSet(final ContentMediaRecordLinksSetEvent event) {
+        log.info("notifyContentMediaRecordLinksSet called with {}", event);
+    }
+
+    @Override
+    public void notifyAssessmentContentMutated(final AssessmentContentMutatedEvent event) {
+        log.info("notifyAssessmentContentMutated called with {}", event);
+    }
+
     @Override
     public void notifyForumActivity(final ForumActivityEvent forumActivityEvent) {
         log.info("notifyForumActivity called with {}", forumActivityEvent);
@@ -55,5 +88,10 @@ public class MockTopicPublisher extends TopicPublisher {
     @Override
     public void notifyAchievementCompleted(final AchievementCompletedEvent achievementCompletedEvent) {
         log.info("notifyAchievementCompleted called with {}", achievementCompletedEvent);
+    }
+
+    @Override
+    public void notifyUserSkillLevelChanged(final UserSkillLevelChangedEvent event) {
+        log.info("notifyUserSkillLevelChanged called with {}", event);
     }
 }
