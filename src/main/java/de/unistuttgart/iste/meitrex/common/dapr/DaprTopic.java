@@ -22,7 +22,8 @@ public enum DaprTopic {
     ASSESSMENT_CONTENT_MUTATED("assessment-content-mutated"),
 
     FORUM_ACTIVITY("forum-activity"),
-    ACHIEVEMENT_COMPLETED("achievement-completed");
+    ACHIEVEMENT_COMPLETED("achievement-completed"),
+    USER_SKILL_LEVEL_CHANGED("user-skill-level-changed");
 
     private final String topic;
 
