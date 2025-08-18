@@ -2,6 +2,8 @@ package de.unistuttgart.iste.meitrex.common.event;
 
 import java.util.List;
 import java.util.UUID;
+
+import de.unistuttgart.iste.meitrex.generated.dto.BloomLevel;
 import lombok.*;
 
 /**
@@ -18,5 +20,5 @@ public class ItemResponse {
 
     public List<UUID>skillIds;
 
-    public List<LevelOfBloomsTaxonomy> levelsOfBloomsTaxonomy;
+    public List<BloomLevel> levelsOfBloomsTaxonomy;
 }

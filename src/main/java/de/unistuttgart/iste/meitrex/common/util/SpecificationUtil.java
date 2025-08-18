@@ -68,7 +68,8 @@ public class SpecificationUtil {
             return alwaysTrue();
         }
 
-        return Specification.<T>where(lessThan(field, dateTimeFilter.getBefore()))
+        return Specification.<T>unrestricted()
+                .and(lessThan(field, dateTimeFilter.getBefore()))
                 .and(greaterThan(field, dateTimeFilter.getAfter()));
     }
 
@@ -86,7 +87,8 @@ public class SpecificationUtil {
             return alwaysTrue();
         }
 
-        return Specification.<T>where(equalTo(field, intFilter.getEquals()))
+        return Specification.<T>unrestricted()
+                .and(equalTo(field, intFilter.getEquals()))
                 .and(lessThan(field, intFilter.getLessThan()))
                 .and(greaterThan(field, intFilter.getGreaterThan()));
     }
