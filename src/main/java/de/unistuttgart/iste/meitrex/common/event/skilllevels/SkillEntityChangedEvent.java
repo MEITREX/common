@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SkillEntityChangeEvent {
+public class SkillEntityChangedEvent {
     private UUID skillId;
     private String skillName;
     private String skillCategory;

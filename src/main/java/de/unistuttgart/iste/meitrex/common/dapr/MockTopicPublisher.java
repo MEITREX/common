@@ -1,6 +1,7 @@
 package de.unistuttgart.iste.meitrex.common.dapr;
 
 import de.unistuttgart.iste.meitrex.common.event.*;
+import de.unistuttgart.iste.meitrex.common.event.skilllevels.SkillEntityChangedEvent;
 import de.unistuttgart.iste.meitrex.common.event.skilllevels.UserSkillLevelChangedEvent;
 import lombok.extern.slf4j.Slf4j;
 
@@ -93,5 +94,10 @@ public class MockTopicPublisher extends TopicPublisher {
     @Override
     public void notifyUserSkillLevelChanged(final UserSkillLevelChangedEvent event) {
         log.info("notifyUserSkillLevelChanged called with {}", event);
+    }
+
+    @Override
+    public void notifySkillEntityChanged(final SkillEntityChangedEvent event) {
+        log.info("notifySkillEntityChanged called with {}", event);
     }
 }

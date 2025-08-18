@@ -1,6 +1,7 @@
 package de.unistuttgart.iste.meitrex.common.dapr;
 
 import de.unistuttgart.iste.meitrex.common.event.*;
+import de.unistuttgart.iste.meitrex.common.event.skilllevels.SkillEntityChangedEvent;
 import de.unistuttgart.iste.meitrex.common.event.skilllevels.UserSkillLevelChangedEvent;
 import io.dapr.client.DaprClient;
 import lombok.RequiredArgsConstructor;
@@ -153,5 +154,9 @@ public class TopicPublisher {
 
     public void notifyUserSkillLevelChanged(final UserSkillLevelChangedEvent event) {
         publishEvent(event, DaprTopic.USER_SKILL_LEVEL_CHANGED);
+    }
+
+    public void notifySkillEntityChanged(final SkillEntityChangedEvent event) {
+        publishEvent(event, DaprTopic.SKILL_ENTITY_CHANGED);
     }
 }
