@@ -32,12 +32,12 @@ public class ProfanityService {
 
     private static Set<String> readLines(Resource resource) throws IOException {
         if (!resource.exists()) {
-            return Set.of(); // or throw if you prefer strict behavior
+            return Set.of();
         }
         try (BufferedReader br = new BufferedReader(
                 new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
             return br.lines()
-                    .map(line -> line.replace("\uFEFF", "")) // strip BOM if present
+                    .map(line -> line.replace("\uFEFF", ""))
                     .map(String::trim)
                     .filter(s -> !s.isEmpty() && !s.startsWith("#"))
                     .collect(Collectors.toSet());
@@ -66,13 +66,17 @@ public class ProfanityService {
         return sb.toString();
     }
 
+    /**
+     * Converts string to lowercase and removes all special carracters and signs
+     * @param s input string
+     * @return normalized string
+     */
     private String normalize(String s) {
-        // Kleinbuchstaben, diakritische Zeichen entfernen, einfache Leetspeak-Map, doppelte Zeichen reduzieren
         String t = java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD)
                 .replaceAll("\\p{M}+", "").toLowerCase(Locale.ROOT);
         t = t.replace('0','o').replace('1','i').replace('@','a').replace('$','s');
-        t = t.replaceAll("[^a-z0-9äöüß ]", "");      // nur Grundzeichen
-        t = t.replaceAll("(.)\\1{2,}", "$1$1");      // loooool -> loool
+        t = t.replaceAll("[^a-z0-9äöüß ]", "");
+        t = t.replaceAll("(.)\\1{2,}", "$1$1");
         return t;
     }
 }
