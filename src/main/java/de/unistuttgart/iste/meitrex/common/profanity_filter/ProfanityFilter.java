@@ -5,7 +5,6 @@ import org.ahocorasick.trie.Emit;
 import org.ahocorasick.trie.Trie;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,15 +13,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Service
 @Slf4j
-public class ProfanityService {
+public class ProfanityFilter {
 
     private final Trie trie;
-    private final Set<String> allowlist = Set.of("Scunthorpe", "Mishit");
+    private final Set<String> allowlist = Set.of();
 
-    public ProfanityService(@Value("classpath:profanity/de.txt") Resource de,
-                            @Value("classpath:profanity/en.txt") Resource en) throws IOException {
+    public ProfanityFilter(@Value("classpath:profanity/de.txt") Resource de,
+                           @Value("classpath:profanity/en.txt") Resource en) throws IOException {
         Set<String> words = new HashSet<>();
         words.addAll(readLines(de));
         words.addAll(readLines(en));

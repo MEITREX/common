@@ -9,38 +9,38 @@ import java.io.IOException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class ProfanityServiceTest {
+public class ProfanityFilterTest {
 
     Resource deResource = new ClassPathResource("profanity/de.txt");
 
     Resource enResource = new ClassPathResource("profanity/en.txt");
 
-    ProfanityService profanityService = new ProfanityService(deResource, enResource);
+    ProfanityFilter profanityFilter = new ProfanityFilter(deResource, enResource);
 
-    public ProfanityServiceTest() throws IOException {
+    public ProfanityFilterTest() throws IOException {
 
     }
 
     @Test
     void profanityCheckerTest() {
         String arschloch = "Du bist ein Arschloch.";
-        assertThat(profanityService.containsProfanity(arschloch), is(true));
+        assertThat(profanityFilter.containsProfanity(arschloch), is(true));
         String asshole = "You are an asshole.";
-        assertThat(profanityService.containsProfanity(asshole), is(true));
+        assertThat(profanityFilter.containsProfanity(asshole), is(true));
         String good = "You are a good person.";
-        assertThat(profanityService.containsProfanity(good), is(false));
+        assertThat(profanityFilter.containsProfanity(good), is(false));
     }
 
     @Test
     void profanityCensorTest() {
         String arschloch = "Du bist ein Arschloch.";
-        String arschlochCensored = profanityService.censor(arschloch);
+        String arschlochCensored = profanityFilter.censor(arschloch);
         assertThat(arschlochCensored, is("Du bist ein *********."));
         String asshole = "You are an asshole.";
-        String assholeCensored = profanityService.censor(asshole);
+        String assholeCensored = profanityFilter.censor(asshole);
         assertThat(assholeCensored, is("You are an *******."));
         String good = "You are a good person.";
-        String goodCensored = profanityService.censor(good);
+        String goodCensored = profanityFilter.censor(good);
         assertThat(goodCensored, is(good));
     }
 }
