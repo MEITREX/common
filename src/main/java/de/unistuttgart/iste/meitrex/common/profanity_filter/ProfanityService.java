@@ -1,5 +1,6 @@
 package de.unistuttgart.iste.meitrex.common.profanity_filter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.ahocorasick.trie.Emit;
 import org.ahocorasick.trie.Trie;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class ProfanityService {
 
     private final Trie trie;
@@ -32,6 +34,7 @@ public class ProfanityService {
 
     private static Set<String> readLines(Resource resource) throws IOException {
         if (!resource.exists()) {
+            log.error("Resource {} does not exist", resource);
             return Set.of();
         }
         try (BufferedReader br = new BufferedReader(
