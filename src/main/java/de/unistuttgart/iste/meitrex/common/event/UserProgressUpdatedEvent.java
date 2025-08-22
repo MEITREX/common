@@ -24,7 +24,7 @@ public class UserProgressUpdatedEvent {
     private int hintsUsed;
     private Integer timeToComplete;
     private List<ItemResponse> responses;
-
+    private MediaType mediaType;
 
 
 }
