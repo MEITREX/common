@@ -13,6 +13,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ContentProgressedEvent {
 
+
+
     private UUID userId;
     private UUID contentId;
     private boolean success;
@@ -20,5 +22,6 @@ public class ContentProgressedEvent {
     private int hintsUsed;
     private Integer timeToComplete;
     private List<Response> responses;
+    private MediaType mediaType;
 
 }
