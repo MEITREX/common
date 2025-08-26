@@ -58,7 +58,7 @@ public class MockTopicPublisher extends TopicPublisher {
     }
 
     @Override
-    public void notificationEvent(final UUID courseId, final ServerSource serverSource, String link, String title, String message){
+    public void notificationEvent(final UUID courseId, final List<UUID> userIds, final ServerSource serverSource, final String link, final String title, final String message){
         log.info("notificationEvent called with {} and {} and {} and {} and {}", courseId, serverSource, link, title, message);
     }
 }

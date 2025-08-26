@@ -159,9 +159,10 @@ public class TopicPublisher {
      * @param link of link
      * @param message of notification message
      */
-    public void notificationEvent(final UUID courseId, final ServerSource serverSource, String link, String Title, String message) {
+    public void notificationEvent(final UUID courseId, final List<UUID> userIds, final ServerSource serverSource, final String link, final String Title, final String message) {
         final NotificationEvent dto = NotificationEvent.builder()
                 .courseId(courseId)
+                .userIds(userIds)
                 .serverSource(serverSource)
                 .link(link)
                 .title(Title)

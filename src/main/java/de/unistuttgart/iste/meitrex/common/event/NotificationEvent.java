@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -14,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class NotificationEvent {
     private UUID courseId;
+    private List<UUID> userIds;
     private ServerSource serverSource;
     private String title;
     private String link;
