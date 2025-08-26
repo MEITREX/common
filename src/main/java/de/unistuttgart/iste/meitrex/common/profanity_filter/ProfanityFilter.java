@@ -68,7 +68,7 @@ public class ProfanityFilter {
     }
 
     /**
-     * Converts string to lowercase and removes all special carracters and signs
+     * Converts string to lowercase and removes all special characters and signs
      * @param s input string
      * @return normalized string
      */
@@ -76,7 +76,7 @@ public class ProfanityFilter {
         String t = java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD)
                 .replaceAll("\\p{M}+", "").toLowerCase(Locale.ROOT);
         t = t.replace('0','o').replace('1','i').replace('@','a').replace('$','s');
-        t = t.replaceAll("[^a-z0-9äöüß ]", "");
+        t = t.replaceAll("[^a-z0-9äöüß<>/ ]", "");
         t = t.replaceAll("(.)\\1{2,}", "$1$1");
         return t;
     }
