@@ -1,4 +1,4 @@
-﻿package de.unistuttgart.iste.meitrex.common.event;
+package de.unistuttgart.iste.meitrex.common.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
