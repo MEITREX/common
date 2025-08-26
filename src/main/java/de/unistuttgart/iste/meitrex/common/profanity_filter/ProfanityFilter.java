@@ -24,7 +24,7 @@ public class ProfanityFilter {
         Set<String> words = new HashSet<>();
         words.addAll(readLines(de));
         words.addAll(readLines(en));
-
+        log.info("Started profanityFilter with {} words", words.size());
         Trie.TrieBuilder builder = Trie.builder().onlyWholeWords().ignoreCase();
         words.forEach(builder::addKeyword);
         this.trie = builder.build();
