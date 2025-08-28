@@ -56,4 +56,9 @@ public class MockTopicPublisher extends TopicPublisher {
     public void notifyAchievementCompleted(final AchievementCompletedEvent achievementCompletedEvent) {
         log.info("notifyAchievementCompleted called with {}", achievementCompletedEvent);
     }
+
+    @Override
+    public void notificationEvent(final UUID courseId, final List<UUID> userIds, final ServerSource serverSource, final String link, final String title, final String message){
+        log.info("notificationEvent called with {} and {} and {} and {} and {}", courseId, serverSource, link, title, message);
+    }
 }

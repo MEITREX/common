@@ -5,6 +5,7 @@ import io.dapr.client.DaprClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -149,5 +150,25 @@ public class TopicPublisher {
      */
     public void notifyAchievementCompleted(final AchievementCompletedEvent event) {
         publishEvent(event, DaprTopic.FORUM_ACTIVITY);
+    }
+
+    /**
+     * Method to notify when a notification is build and should be sent to Notification Service
+     * @param courseId of changed course
+     * @param serverSource of the source service
+     * @param link of link
+     * @param message of notification message
+     */
+    public void notificationEvent(final UUID courseId, final List<UUID> userIds, final ServerSource serverSource, final String link, final String Title, final String message) {
+        final NotificationEvent dto = NotificationEvent.builder()
+                .courseId(courseId)
+                .userIds(userIds)
+                .serverSource(serverSource)
+                .link(link)
+                .title(Title)
+                .message(message)
+                .timestamp(OffsetDateTime.now())
+                .build();
+        publishEvent(dto, DaprTopic.NOTIFICATION_EVENT);
     }
 }
