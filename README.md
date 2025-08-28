@@ -42,3 +42,7 @@ git push --tags
 
 The tag should be the previous version + 0.0.1 for minor changes, + 0.1.0 for breaking changes and + 1.0.0 for major changes.
 
+## List of Profanity words
+
+The list for profanity words is copied form the [List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words) 
+licensed under CC BY 4.0.
