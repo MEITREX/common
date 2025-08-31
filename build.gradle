@@ -37,6 +37,7 @@ graphqlCodegen {
 	packageName = "de.unistuttgart.iste.meitrex.generated.dto"
 	generatedAnnotation = "jakarta.annotation.Generated"
 	modelValidationAnnotation = "jakarta.validation.constraints.NotNull"
+    generateJacksonTypeIdResolver = true // allows graphql .toEntity() conversion with Jackson for interfaces and unions
 	generateApis = false // set to false as the generator does not support spring boot graphQL
 	customTypesMapping = [
 			"DateTime" : "java.time.OffsetDateTime",
