@@ -36,7 +36,7 @@ class TestSpecificationUtil {
      */
     @Test
     void testNullSafety() {
-        final Function<Object, Specification<Object>> dummyFunction = o -> Specification.where(null);
+        final Function<Object, Specification<Object>> dummyFunction = o -> Specification.unrestricted();
 
         assertThat(SpecificationUtil.stringFilter("test", null),
                 equalTo(SpecificationUtil.alwaysTrue()));
