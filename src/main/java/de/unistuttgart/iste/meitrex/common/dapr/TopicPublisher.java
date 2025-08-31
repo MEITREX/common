@@ -161,6 +161,10 @@ public class TopicPublisher {
         publishEvent(event, DaprTopic.SKILL_ENTITY_CHANGED);
     }
 
+    public void notifyStageCompleted(final StageCompletedEvent event) {
+        publishEvent(event, DaprTopic.STAGE_COMPLETED);
+    }
+
     /**
      * Method to notify when a notification is build and should be sent to Notification Service
      * @param courseId of changed course
