@@ -1,6 +1,8 @@
 package de.unistuttgart.iste.meitrex.common.dapr;
 
 import de.unistuttgart.iste.meitrex.common.event.*;
+import de.unistuttgart.iste.meitrex.common.event.skilllevels.SkillEntityChangedEvent;
+import de.unistuttgart.iste.meitrex.common.event.skilllevels.UserSkillLevelChangedEvent;
 import io.dapr.client.DaprClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -143,13 +145,24 @@ public class TopicPublisher {
         publishEvent(event, DaprTopic.FORUM_ACTIVITY);
     }
 
-
     /**
      * Method to notify when a user completed an achievement
      * @param event of the achievement that was completed and the user that completed the achievement
      */
     public void notifyAchievementCompleted(final AchievementCompletedEvent event) {
         publishEvent(event, DaprTopic.FORUM_ACTIVITY);
+    }
+
+    public void notifyUserSkillLevelChanged(final UserSkillLevelChangedEvent event) {
+        publishEvent(event, DaprTopic.USER_SKILL_LEVEL_CHANGED);
+    }
+
+    public void notifySkillEntityChanged(final SkillEntityChangedEvent event) {
+        publishEvent(event, DaprTopic.SKILL_ENTITY_CHANGED);
+    }
+
+    public void notifyStageCompleted(final StageCompletedEvent event) {
+        publishEvent(event, DaprTopic.STAGE_COMPLETED);
     }
 
     /**

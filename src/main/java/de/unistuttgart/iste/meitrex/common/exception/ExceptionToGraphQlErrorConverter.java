@@ -34,7 +34,7 @@ public class ExceptionToGraphQlErrorConverter {
                 .path(env.getExecutionStepInfo().getPath())
                 .location(env.getField().getSourceLocation())
                 .errorType(getErrorType(ex))
-                .message(ex.getMessage())
+                .message(ex.getMessage() != null ? ex.getMessage() : "")
                 .build();
     }
 
