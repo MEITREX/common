@@ -31,7 +31,9 @@ public enum DaprTopic {
 
     SKILL_ENTITY_CHANGED("skill-entity-changed"),
 
-    STAGE_COMPLETED("stage-completed");
+    STAGE_COMPLETED("stage-completed"),
+
+    ASKED_TUTOR_A_QUESTION("asked-tutor-a-question");
 
     private final String topic;
 
