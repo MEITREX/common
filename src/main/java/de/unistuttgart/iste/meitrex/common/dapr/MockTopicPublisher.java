@@ -110,4 +110,9 @@ public class MockTopicPublisher extends TopicPublisher {
     public void notifyStageCompleted(final StageCompletedEvent event) {
         log.info("notifyStageCompleted called with {}", event);
     }
+
+    @Override
+    public void notifyQuestionAsked(final AskedTutorAQuestionEvent event) {
+        log.info("notifyQuestionAsked called with {}", event);
+    }
 }
