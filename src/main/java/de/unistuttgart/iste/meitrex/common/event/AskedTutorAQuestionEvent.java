@@ -13,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class AskedTutorAQuestionEvent {
     private UUID userId;
+    private UUID courseId;
     private String question;
     private TutorCategory category;
 }
