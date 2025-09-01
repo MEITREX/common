@@ -169,7 +169,7 @@ public class TopicPublisher {
      * Method to notify when a user the AI Tutor a question
      * @param event of the question that was asked, the corresponding category, the user that asked it and the courseId
      */
-    public void notifyQuestionAsked(final AskedTutorAQuestionEvent event) {
+    public void notifyTutorQuestionAsked(final AskedTutorAQuestionEvent event) {
         publishEvent(event, DaprTopic.ASKED_TUTOR_A_QUESTION);
     }
 

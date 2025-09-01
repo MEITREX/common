@@ -112,7 +112,7 @@ public class MockTopicPublisher extends TopicPublisher {
     }
 
     @Override
-    public void notifyQuestionAsked(final AskedTutorAQuestionEvent event) {
-        log.info("notifyQuestionAsked called with {}", event);
+    public void notifyTutorQuestionAsked(final AskedTutorAQuestionEvent event) {
+        log.info("notifyTutorQuestionAsked called with {}", event);
     }
 }
