@@ -112,6 +112,16 @@ public class MockTopicPublisher extends TopicPublisher {
     }
 
     @Override
+    public void notifyChapterCompleted(final ChapterCompletedEvent event) {
+        log.info("notifyChapterCompleted called with {}", event);
+    }
+
+    @Override
+    public void notifyCourseCompleted(final CourseCompletedEvent event) {
+        log.info("notifyCourseCompleted called with {}", event);
+    }
+
+    @Override
     public void notifyTutorQuestionAsked(final AskedTutorAQuestionEvent event) {
         log.info("notifyTutorQuestionAsked called with {}", event);
     }

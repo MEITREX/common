@@ -165,6 +165,14 @@ public class TopicPublisher {
         publishEvent(event, DaprTopic.STAGE_COMPLETED);
     }
 
+    public void notifyChapterCompleted(final ChapterCompletedEvent event) {
+        publishEvent(event, DaprTopic.CHAPTER_COMPLETED);
+    }
+
+    public void notifyCourseCompleted(final CourseCompletedEvent event) {
+        publishEvent(event, DaprTopic.COURSE_COMPLETED);
+    }
+
     /**
      * Method to notify when a user the AI Tutor a question
      * @param event of the question that was asked, the corresponding category, the user that asked it and the courseId

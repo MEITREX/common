@@ -33,6 +33,10 @@ public enum DaprTopic {
 
     STAGE_COMPLETED("stage-completed"),
 
+    CHAPTER_COMPLETED("chapter-completed"),
+
+    COURSE_COMPLETED("course-completed"),
+
     ASKED_TUTOR_A_QUESTION("asked-tutor-a-question");
 
     private final String topic;
