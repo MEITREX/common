@@ -14,7 +14,6 @@ import java.util.UUID;
 public class StageCompletedEvent {
     private UUID courseId;
     private UUID chapterId;
-    private UUID sectionId;
     private UUID stageId;
     private UUID userId;
 }
