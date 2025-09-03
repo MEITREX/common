@@ -181,6 +181,10 @@ public class TopicPublisher {
         publishEvent(event, DaprTopic.ASKED_TUTOR_A_QUESTION);
     }
 
+    public void notifyMediaRecordInfoEvent(final MediaRecordInfoEvent event) {
+        publishEvent(event, DaprTopic.MEDIA_RECORD_INFO);
+    }
+
     /**
      * Method to notify when a notification is build and should be sent to Notification Service
      * @param courseId of changed course
