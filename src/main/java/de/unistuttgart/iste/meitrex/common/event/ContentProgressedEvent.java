@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ContentProgressedEvent {
 
-    enum ContentType {
+    public enum ContentType {
         ASSIGNMENT, QUIZ, FLASHCARDS, OTHER
     }
 
