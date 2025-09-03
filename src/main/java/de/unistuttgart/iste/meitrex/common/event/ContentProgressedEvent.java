@@ -13,7 +13,9 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ContentProgressedEvent {
 
-
+    enum ContentType {
+        ASSIGNMENT, QUIZ, FLASHCARDS, OTHER
+    }
 
     private UUID userId;
     private UUID contentId;
@@ -23,5 +25,6 @@ public class ContentProgressedEvent {
     private Integer timeToComplete;
     private List<Response> responses;
     private MediaType mediaType;
+    private ContentType contentType;
 
 }
