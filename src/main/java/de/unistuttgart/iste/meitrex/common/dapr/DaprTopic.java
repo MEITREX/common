@@ -37,6 +37,8 @@ public enum DaprTopic {
 
     COURSE_COMPLETED("course-completed"),
 
+    MEDIA_RECORD_INFO("media-record-info"),
+
     ASKED_TUTOR_A_QUESTION("asked-tutor-a-question");
 
     private final String topic;
