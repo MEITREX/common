@@ -130,4 +130,14 @@ public class MockTopicPublisher extends TopicPublisher {
     public void notifyMediaRecordInfoEvent(final MediaRecordInfoEvent event) {
         log.info("notifyMediaRecordInfoEvent called with {}", event);
     }
+
+    @Override
+    public void notifyUserCourseMembershipChanged(final UserCourseMembershipChangedEvent event) {
+        log.info("notifyUserCourseMembershipChanged called with {}", event);
+    }
+
+    @Override
+    public void notifyMediaRecordWorkedOn(final MediaRecordWorkedOnEvent event) {
+        log.info("notifyMediaRecordWorkedOn called with {}", event);
+    }
 }
