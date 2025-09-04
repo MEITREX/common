@@ -185,6 +185,14 @@ public class TopicPublisher {
         publishEvent(event, DaprTopic.MEDIA_RECORD_INFO);
     }
 
+    public void notifyUserCourseMembershipChanged(final UserCourseMembershipChangedEvent event) {
+        publishEvent(event, DaprTopic.USER_COURSE_MEMBERSHIP_CHANGED);
+    }
+
+    public void notifyMediaRecordWorkedOn(final MediaRecordWorkedOnEvent event) {
+        publishEvent(event, DaprTopic.MEDIA_RECORD_WORKED_ON);
+    }
+
     /**
      * Method to notify when a notification is build and should be sent to Notification Service
      * @param courseId of changed course

@@ -1,0 +1,8 @@
+"""
+Enum containing all valid roles a user can have in a course.
+"""
+enum UserRoleInCourse {
+    STUDENT,
+    TUTOR,
+    ADMINISTRATOR
+}
