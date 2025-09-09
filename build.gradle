@@ -80,6 +80,7 @@ dependencies {
 	implementation "io.github.kobylynskyi:graphql-java-codegen:5.10.0"
 	implementation 'org.jetbrains:annotations:26.0.1'
 	implementation 'org.ahocorasick:ahocorasick:0.6.3'
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.0" // Support for Java 8 Date & Time API types in Jackson
 	compileOnly 'org.projectlombok:lombok:1.18.38'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools:3.4.5'
 	runtimeOnly 'org.postgresql:postgresql:42.7.5'
