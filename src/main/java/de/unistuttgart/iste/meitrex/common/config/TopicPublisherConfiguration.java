@@ -1,5 +1,6 @@
 package de.unistuttgart.iste.meitrex.common.config;
 
+import de.unistuttgart.iste.meitrex.common.dapr.CustomDaprObjectSerializer;
 import de.unistuttgart.iste.meitrex.common.dapr.TopicPublisher;
 import io.dapr.client.DaprClientBuilder;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,8 @@ import org.springframework.context.annotation.Profile;
 public class TopicPublisherConfiguration {
     @Bean
     public TopicPublisher topicPublisher() {
-        return new TopicPublisher(new DaprClientBuilder().build());
+        return new TopicPublisher(new DaprClientBuilder()
+                .withObjectSerializer(new CustomDaprObjectSerializer())
+                .build());
     }
 }
