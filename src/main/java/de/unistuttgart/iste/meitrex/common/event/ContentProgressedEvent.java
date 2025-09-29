@@ -14,7 +14,7 @@ import java.util.UUID;
 public class ContentProgressedEvent {
 
     public enum ContentType {
-        ASSIGNMENT, QUIZ, FLASHCARDS, OTHER
+        ASSIGNMENT, QUIZ, FLASHCARDS, SUBMISSION, OTHER
     }
 
     private UUID userId;
