@@ -43,7 +43,9 @@ public enum DaprTopic {
 
     MEDIA_RECORD_WORKED_ON("media-record-worked-on"),
 
-    ASKED_TUTOR_A_QUESTION("asked-tutor-a-question");
+    ASKED_TUTOR_A_QUESTION("asked-tutor-a-question"),
+
+    SUBMISSION_COMPLETED("submission-completed"),;
 
     private final String topic;
 
