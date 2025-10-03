@@ -193,6 +193,10 @@ public class TopicPublisher {
         publishEvent(event, DaprTopic.MEDIA_RECORD_WORKED_ON);
     }
 
+    public void notifySubmissionCompleted(final SubmissionCompletedEvent event) {
+        publishEvent(event, DaprTopic.SUBMISSION_COMPLETED);
+    }
+
     /**
      * Method to notify when a notification is build and should be sent to Notification Service
      * @param courseId of changed course
