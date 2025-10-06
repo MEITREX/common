@@ -1,5 +1,5 @@
 package de.unistuttgart.iste.meitrex.common.event;
 
 public enum ServerSource {
-    COURSE, CHAPTER, CONTENT, MEDIA, GAMIFICATION
+    COURSE, CHAPTER, CONTENT, MEDIA, GAMIFICATION, REWARD, SKILL, FLASHCARD, QUIZ, TUTOR
 }
