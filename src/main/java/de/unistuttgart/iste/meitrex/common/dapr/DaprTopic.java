@@ -45,7 +45,9 @@ public enum DaprTopic {
 
     ASKED_TUTOR_A_QUESTION("asked-tutor-a-question"),
 
-    SUBMISSION_COMPLETED("submission-completed"),;
+    SUBMISSION_COMPLETED("submission-completed"),
+
+    USER_HEXAD_PLAYER_TYPE_SET("user-hexad-player-type-set"),;
 
     private final String topic;
 

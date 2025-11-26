@@ -198,6 +198,14 @@ public class TopicPublisher {
     }
 
     /**
+     * Method to notify when a user's Hexad player type is set, updated or requested for the first time
+     * @param event of the user's Hexad player type that was set
+     */
+    public void notifyUserHexadPlayerTypeSet(final UserHexadPlayerTypeSetEvent event) {
+        publishEvent(event, DaprTopic.USER_HEXAD_PLAYER_TYPE_SET);
+    }
+
+    /**
      * Method to notify when a notification is build and should be sent to Notification Service
      * @param courseId of changed course
      * @param serverSource of the source service
