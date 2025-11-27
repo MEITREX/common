@@ -3,6 +3,7 @@ package de.unistuttgart.iste.meitrex.common.dapr;
 public enum DaprTopic {
 
     COURSE_CHANGED("course-changed"),
+    
     CHAPTER_CHANGED("chapter-changed"),
 
     CONTENT_PROGRESSED("content-progressed"),
@@ -47,7 +48,9 @@ public enum DaprTopic {
 
     SUBMISSION_COMPLETED("submission-completed"),
 
-    USER_HEXAD_PLAYER_TYPE_SET("user-hexad-player-type-set"),;
+    USER_HEXAD_PLAYER_TYPE_SET("user-hexad-player-type-set"),
+
+    REQUEST_HEXAD_PLAYER_TYPE("request-hexad-player-type"),;
 
     private final String topic;
 

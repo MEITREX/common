@@ -206,6 +206,14 @@ public class TopicPublisher {
     }
 
     /**
+     * Method to request a UserHexadPlayerTypeSetEvent for a specific user
+     * @param event containing the user ID for which the player type is requested
+     */
+    public void notifyRequestHexadPlayerType(final RequestHexadPlayerTypeEvent event) {
+        publishEvent(event, DaprTopic.REQUEST_HEXAD_PLAYER_TYPE);
+    }
+
+    /**
      * Method to notify when a notification is build and should be sent to Notification Service
      * @param courseId of changed course
      * @param serverSource of the source service
