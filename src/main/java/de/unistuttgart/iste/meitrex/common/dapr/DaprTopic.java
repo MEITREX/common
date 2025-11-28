@@ -50,7 +50,9 @@ public enum DaprTopic {
 
     USER_HEXAD_PLAYER_TYPE_SET("user-hexad-player-type-set"),
 
-    REQUEST_HEXAD_PLAYER_TYPE("request-hexad-player-type"),;
+    REQUEST_HEXAD_PLAYER_TYPE("request-hexad-player-type"),
+
+    REQUEST_USER_SKILL_LEVEL("request-user-skill-level"),;
 
     private final String topic;
 

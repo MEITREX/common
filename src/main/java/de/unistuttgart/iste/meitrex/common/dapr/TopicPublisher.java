@@ -214,6 +214,14 @@ public class TopicPublisher {
     }
 
     /**
+     * Method to request the skill levels for a specific user
+     * @param event containing the user ID for which the skill levels are requested
+     */
+    public void notifyRequestUserSkillLevel(final RequestUserSkillLevelEvent event) {
+        publishEvent(event, DaprTopic.REQUEST_USER_SKILL_LEVEL);
+    }
+
+    /**
      * Method to notify when a notification is build and should be sent to Notification Service
      * @param courseId of changed course
      * @param serverSource of the source service
