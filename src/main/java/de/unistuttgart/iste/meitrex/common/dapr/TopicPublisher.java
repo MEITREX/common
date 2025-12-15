@@ -198,6 +198,40 @@ public class TopicPublisher {
     }
 
     /**
+     * Method to notify when a user's Hexad player type is set, updated or requested for the first time
+     * @param event of the user's Hexad player type that was set
+     */
+    public void notifyUserHexadPlayerTypeSet(final UserHexadPlayerTypeSetEvent event) {
+        publishEvent(event, DaprTopic.USER_HEXAD_PLAYER_TYPE_SET);
+    }
+
+    /**
+     * Method to request a UserHexadPlayerTypeSetEvent for a specific user
+     * @param event containing the user ID for which the player type is requested
+     */
+    public void notifyRequestHexadPlayerType(final RequestHexadPlayerTypeEvent event) {
+        publishEvent(event, DaprTopic.REQUEST_HEXAD_PLAYER_TYPE);
+    }
+
+    /**
+     * Method to request the skill levels for a specific user
+     * @param event containing the user ID for which the skill levels are requested
+     */
+    public void notifyRequestUserSkillLevel(final RequestUserSkillLevelEvent event) {
+        publishEvent(event, DaprTopic.REQUEST_USER_SKILL_LEVEL);
+    }
+
+    /**
+     * Method to notify when a student submits code for an assignment.
+     * This is triggered when the assignment service loads a student's code from their repository.
+     *
+     * @param event containing the submission details including student, assignment, repository info, and files
+     */
+    public void notifyStudentCodeSubmitted(final StudentCodeSubmittedEvent event) {
+        publishEvent(event, DaprTopic.STUDENT_CODE_SUBMITTED);
+    }
+
+    /**
      * Method to notify when a notification is build and should be sent to Notification Service
      * @param courseId of changed course
      * @param serverSource of the source service
