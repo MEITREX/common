@@ -222,6 +222,16 @@ public class TopicPublisher {
     }
 
     /**
+     * Method to notify when a student submits code for an assignment.
+     * This is triggered when the assignment service loads a student's code from their repository.
+     *
+     * @param event containing the submission details including student, assignment, repository info, and files
+     */
+    public void notifyStudentCodeSubmitted(final StudentCodeSubmittedEvent event) {
+        publishEvent(event, DaprTopic.STUDENT_CODE_SUBMITTED);
+    }
+
+    /**
      * Method to notify when a notification is build and should be sent to Notification Service
      * @param courseId of changed course
      * @param serverSource of the source service

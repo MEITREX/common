@@ -52,7 +52,9 @@ public enum DaprTopic {
 
     REQUEST_HEXAD_PLAYER_TYPE("request-hexad-player-type"),
 
-    REQUEST_USER_SKILL_LEVEL("request-user-skill-level"),;
+    REQUEST_USER_SKILL_LEVEL("request-user-skill-level"),
+    
+    STUDENT_CODE_SUBMITTED("student-code-submitted"),;
 
     private final String topic;
 
