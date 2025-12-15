@@ -5,5 +5,6 @@ public enum TutorCategory {
     LECTURE,
     UNRECOGNIZABLE,
     OTHER,
-    ERROR
+    ERROR,
+    CODE_FEEDBACK
 }
