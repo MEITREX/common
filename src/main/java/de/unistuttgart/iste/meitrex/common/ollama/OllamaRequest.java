@@ -2,26 +2,17 @@ package de.unistuttgart.iste.meitrex.common.ollama;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import java.util.Map;
 
-@Getter
-public class OllamaRequest {
+public record OllamaRequest(@JsonProperty("model") String model, @JsonProperty("prompt") String prompt,
+                            @JsonProperty("stream") boolean stream,
+                            @JsonProperty("format") Map<String, Object> format) {
 
-    @JsonProperty("model")
-    final String model;
-
-    @JsonProperty("prompt")
-    final String prompt;
-
-    @JsonProperty("stream")
-    final boolean stream;
-
-    public OllamaRequest(String model, String prompt, boolean stream) {
+    public OllamaRequest(String model, String prompt, boolean stream, Map<String, Object> format) {
         this.model = model;
         this.prompt = prompt;
         this.stream = stream;
-    }
-
-    public OllamaRequest(String model, String prompt) {
-        this(model, prompt, false);
+        this.format = format;
     }
 }
+

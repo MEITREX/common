@@ -4,5 +4,6 @@ public enum AssessmentType {
     QUIZ,
     FLASHCARDS,
     ASSIGNMENT,
-    SUBMISSION
+    SUBMISSION,
+    UML_EXERCISE
 }
