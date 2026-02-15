@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nullable;
 import java.io.*;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -109,17 +110,20 @@ public class OllamaClient {
      * Starts a query to the LLM by filling a prompt template, sending it to Ollama,
      * and parsing the response into the given type.
      *
-     * @param responseType the target class to parse the response into
-     * @param prompt the template prompt text
-     * @param argMap A map of placeholder keys and their replacement values.
-     * @param error the fallback value if parsing or the request fails
+     * @param responseType  the target class to parse the response into
+     * @param prompt        the template prompt text
+     * @param argMap        A map of placeholder keys and their replacement values.
+     * @param error         the fallback value if parsing or the request fails
+     * @param modelOverride the specific LLM model name to use for this request (e.g., "llama3:70b").
+     * If null or blank, the default model from the configuration is used.
      * @return the parsed response or the fallback error value
      */
     public <ResponseType> ResponseType startQuery(
             final Class<ResponseType> responseType,
             final String prompt,
             final Map<String, String> argMap,
-            final ResponseType error) {
+            final ResponseType error,
+            @Nullable final String modelOverride) {
         try {
             final String filledPrompt = fillTemplate(prompt, argMap);
 
@@ -127,8 +131,19 @@ public class OllamaClient {
             final String jsonSchema = jsonSchemaService.getJsonSchema(responseType);
             final Map<String, Object> schemaObject = jsonMapper.readValue(jsonSchema, typeRef);
 
+            // Determine which model to use: override or default config
+            final String modelToUse = (modelOverride != null && !modelOverride.isBlank())
+                    ? modelOverride
+                    : this.config.getModel();
+
+            log.info("Starting LLM query. Model: {}", modelToUse);
+
             OllamaRequest request = new OllamaRequest(
-                    this.config.getModel(), filledPrompt, false, schemaObject);
+                    modelToUse,
+                    filledPrompt,
+                    false,
+                    schemaObject
+            );
 
             final OllamaResponse response = queryLLM(request);
             final Optional<ResponseType> parsedResponse = parseResponse(response, responseType);
