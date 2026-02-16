@@ -6,7 +6,6 @@ import de.unistuttgart.iste.meitrex.common.config.OllamaConfig;
 import de.unistuttgart.iste.meitrex.common.service.JsonSchemaGeneratorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
@@ -17,7 +16,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -60,8 +58,7 @@ public class OllamaClient {
             }
         } catch (IOException e) {
             log.error("Failed to read template file: {}", templateFileName, e);
-            final StringBuilder error = new StringBuilder("Failed to read template file: ").append(templateFileName);
-            throw new RuntimeException(error.toString(), e);
+            throw new RuntimeException("Failed to read template file: " + templateFileName, e);
         }
     }
 
@@ -107,25 +104,28 @@ public class OllamaClient {
     }
 
     /**
-     * Starts a query to the LLM by filling a prompt template, sending it to Ollama,
-     * and parsing the response into the given type.
+     * Executes a full LLM query cycle: loads a template from resources, fills it with arguments,
+     * requests a structured response from Ollama, and parses the result.
      *
-     * @param responseType  the target class to parse the response into
-     * @param prompt        the template prompt text
-     * @param argMap        A map of placeholder keys and their replacement values.
-     * @param error         the fallback value if parsing or the request fails
-     * @param modelOverride the specific LLM model name to use for this request (e.g., "llama3:70b").
-     * If null or blank, the default model from the configuration is used.
-     * @return the parsed response or the fallback error value
+     * @param <ResponseType> the target type for the structured JSON response
+     * @param responseType   the class of the target type to parse the response into
+     * @param templateFileName   the name of the file in the prompt folder (e.g., "analysis_prompt.md")
+     * @param argMap         a map of placeholder keys (without braces) and their replacement values
+     * @param error          the fallback value to return if the query, parsing, or template loading fails
+     * @param modelOverride  optional model name (e.g., "llama3.3:70b") to bypass the default config.
+     * If null/blank, the default from {@link OllamaConfig} is used.
+     * @return the parsed response object of type ResponseType, or the provided error fallback
      */
     public <ResponseType> ResponseType startQuery(
             final Class<ResponseType> responseType,
-            final String prompt,
+            final String templateFileName,
             final Map<String, String> argMap,
             final ResponseType error,
             @Nullable final String modelOverride) {
         try {
-            final String filledPrompt = fillTemplate(prompt, argMap);
+            final String promptTemplate = getTemplate(templateFileName);
+
+            final String filledPrompt = fillTemplate(promptTemplate, argMap);
 
             final TypeReference<HashMap<String, Object>> typeRef = new TypeReference<>() {};
             final String jsonSchema = jsonSchemaService.getJsonSchema(responseType);
@@ -157,6 +157,24 @@ public class OllamaClient {
             Thread.currentThread().interrupt();
             return error;
         }
+    }
+
+    /**
+     * Overloaded helper method for backward compatibility.
+     * Starts a query using the default model defined in the configuration.
+     *
+     * @param responseType the target class to parse the response into
+     * @param templateFileName  the name of the file in the prompt folder (e.g., "analysis_prompt.md")
+     * @param argMap       A map of placeholder keys and their replacement values.
+     * @param error        the fallback value if parsing or the request fails
+     * @return the parsed response or the fallback error value
+     */
+    public <ResponseType> ResponseType startQuery(
+            final Class<ResponseType> responseType,
+            final String templateFileName,
+            final Map<String, String> argMap,
+            final ResponseType error) {
+        return startQuery(responseType, templateFileName, argMap, error, null);
     }
 
     /**
