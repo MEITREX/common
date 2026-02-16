@@ -41,7 +41,14 @@ public class OllamaClient {
      * @throws RuntimeException if the file is not found or cannot be read
      */
     public String getTemplate(final String templateFileName) {
-        final String path = config.getPromptFolder() + "/" + templateFileName;
+        final String folder = config.getPromptFolder();
+        final String sanitizedFolder = folder.startsWith("/") ? folder : "/" + folder;
+
+        final String path = sanitizedFolder.endsWith("/")
+                ? sanitizedFolder + templateFileName
+                : sanitizedFolder + "/" + templateFileName;
+
+        log.debug("Attempting to load template from path: {}", path);
 
         try (InputStream inputStream = this.getClass().getResourceAsStream(path)) {
             if (inputStream == null) {
