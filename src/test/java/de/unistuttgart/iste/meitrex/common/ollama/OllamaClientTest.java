@@ -40,10 +40,9 @@ class OllamaClientTest {
 
     @BeforeEach
     void setUp() {
-        ollamaClient = new OllamaClient(config, jsonSchemaService, jsonMapper, httpClient);
+        OllamaClient realClient = new OllamaClient(config, jsonSchemaService, jsonMapper, httpClient);
+        ollamaClient = spy(realClient);
     }
-
-    // --- Tests for fillTemplate ---
 
     @Test
     void testFillTemplateSuccess() {
@@ -71,10 +70,13 @@ class OllamaClientTest {
 
     @Test
     void testStartQuerySuccess() throws IOException, InterruptedException {
-        String prompt = "Calculate 1+1";
+        String templateFileName = "test_prompt.md";
+        String templateContent = "Calculate 1+1";
         Map<String, String> args = Map.of();
         String mockSchema = "{\"type\":\"object\"}";
         String ollamaJsonResponse = "{\"response\": \"{\\\"result\\\": 2}\", \"done\": true}";
+
+        doReturn(templateContent).when(ollamaClient).getTemplate(templateFileName);
 
         when(config.getModel()).thenReturn("llama3");
         when(config.getUrl()).thenReturn("http://localhost:11434");
@@ -92,7 +94,7 @@ class OllamaClientTest {
 
         TestResponseDto result = ollamaClient.startQuery(
             TestResponseDto.class,
-            prompt,
+            templateFileName,
             args,
             new TestResponseDto(0)
         );
@@ -109,6 +111,9 @@ class OllamaClientTest {
 
     @Test
     void testStartQueryHandlesNetworkError() throws IOException, InterruptedException {
+        String templateFileName = "error_test.md";
+        doReturn("some prompt").when(ollamaClient).getTemplate(templateFileName);
+
         when(config.getModel()).thenReturn("llama3");
         when(config.getUrl()).thenReturn("http://localhost:11434");
         when(config.getEndpoint()).thenReturn("api/generate");
@@ -123,7 +128,7 @@ class OllamaClientTest {
         TestResponseDto fallback = new TestResponseDto(-1);
 
         TestResponseDto result = ollamaClient.startQuery(
-            TestResponseDto.class, "prompt", Map.of(), fallback
+                TestResponseDto.class, templateFileName, Map.of(), fallback
         );
 
         assertThat(result, sameInstance(fallback));
@@ -131,6 +136,9 @@ class OllamaClientTest {
 
     @Test
     void testStartQueryHandlesOllamaError() throws IOException, InterruptedException {
+        String templateFileName = "ollama_error.md";
+        doReturn("some prompt").when(ollamaClient).getTemplate(templateFileName);
+
         when(config.getModel()).thenReturn("llama3");
         when(config.getUrl()).thenReturn("http://localhost:11434");
         when(config.getEndpoint()).thenReturn("api/generate");
@@ -149,7 +157,7 @@ class OllamaClientTest {
         TestResponseDto fallback = new TestResponseDto(-1);
 
         TestResponseDto result = ollamaClient.startQuery(
-            TestResponseDto.class, "prompt", Map.of(), fallback
+                TestResponseDto.class, templateFileName, Map.of(), fallback
         );
 
         assertThat(result, sameInstance(fallback));
