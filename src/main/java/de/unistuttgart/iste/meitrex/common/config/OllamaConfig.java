@@ -20,4 +20,7 @@ public class OllamaConfig {
     // Should be the name of the folder in which the prompts reside in the resource directory
     @Value("${ollama.promptFolder:prompt_templates}")
     private String promptFolder;
+
+    @Value("${ollama.apiKey:}")
+    private String apiKey;
 }

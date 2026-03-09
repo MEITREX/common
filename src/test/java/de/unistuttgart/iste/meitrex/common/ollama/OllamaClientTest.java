@@ -16,7 +16,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -69,23 +68,37 @@ class OllamaClientTest {
     }
 
     @Test
-    void testStartQuerySuccess() throws IOException, InterruptedException {
+    void testStartQuerySuccess() throws Exception {
         String templateFileName = "test_prompt.md";
         String templateContent = "Calculate 1+1";
         Map<String, String> args = Map.of();
-        String mockSchema = "{\"type\":\"object\"}";
-        String ollamaJsonResponse = "{\"response\": \"{\\\"result\\\": 2}\", \"done\": true}";
+
+        String mockSchema = "{\"type\":\"object\", \"properties\":{\"result\":{\"type\":\"integer\"}}}";
+
+        String liteLlmJsonResponse = """
+            {
+              "choices": [
+                {
+                  "message": {
+                    "content": "{\\"result\\": 2}"
+                  }
+                }
+              ]
+            }
+        """;
 
         doReturn(templateContent).when(ollamaClient).getTemplate(templateFileName);
 
-        when(config.getModel()).thenReturn("llama3");
-        when(config.getUrl()).thenReturn("http://localhost:11434");
-        when(config.getEndpoint()).thenReturn("api/generate");
+        when(config.getModel()).thenReturn("mixtral:8x22b");
+        when(config.getUrl()).thenReturn("http://localhost:4000");
+        when(config.getEndpoint()).thenReturn("v1/chat/completions");
+        when(config.getApiKey()).thenReturn("sk-test-api-key");
 
         when(jsonSchemaService.getJsonSchema(TestResponseDto.class)).thenReturn(mockSchema);
 
+        @SuppressWarnings("unchecked")
         HttpResponse<String> mockHttpResponse = mock(HttpResponse.class);
-        when(mockHttpResponse.body()).thenReturn(ollamaJsonResponse);
+        when(mockHttpResponse.body()).thenReturn(liteLlmJsonResponse);
 
         when(httpClient.send(
             any(HttpRequest.class),
@@ -106,19 +119,23 @@ class OllamaClientTest {
         verify(httpClient).send(requestCaptor.capture(), ArgumentMatchers.<HttpResponse.BodyHandler<String>>any());
 
         HttpRequest sentRequest = requestCaptor.getValue();
-        assertThat(sentRequest.uri().toString(), is("http://localhost:11434/api/generate"));
+        assertThat(sentRequest.uri().toString(), is("http://localhost:4000/v1/chat/completions"));
+
+        var authHeader = sentRequest.headers().map().get("Authorization");
+        assertThat(authHeader, is(notNullValue()));
+        assertThat(authHeader.get(0), is("Bearer sk-test-api-key"));
     }
 
     @Test
-    void testStartQueryHandlesNetworkError() throws IOException, InterruptedException {
+    void testStartQueryHandlesNetworkError() throws Exception {
         String templateFileName = "error_test.md";
         doReturn("some prompt").when(ollamaClient).getTemplate(templateFileName);
 
-        when(config.getModel()).thenReturn("llama3");
-        when(config.getUrl()).thenReturn("http://localhost:11434");
-        when(config.getEndpoint()).thenReturn("api/generate");
+        when(config.getModel()).thenReturn("mixtral:8x22b");
+        when(config.getUrl()).thenReturn("http://localhost:4000");
+        when(config.getEndpoint()).thenReturn("v1/chat/completions");
 
-        when(jsonSchemaService.getJsonSchema(any())).thenReturn("{}");
+        when(jsonSchemaService.getJsonSchema(any())).thenReturn("{\"properties\":{}}");
 
         when(httpClient.send(
             any(HttpRequest.class),
@@ -135,17 +152,19 @@ class OllamaClientTest {
     }
 
     @Test
-    void testStartQueryHandlesOllamaError() throws IOException, InterruptedException {
-        String templateFileName = "ollama_error.md";
+    void testStartQueryHandlesLiteLlmError() throws Exception {
+        String templateFileName = "api_error.md";
         doReturn("some prompt").when(ollamaClient).getTemplate(templateFileName);
 
-        when(config.getModel()).thenReturn("llama3");
-        when(config.getUrl()).thenReturn("http://localhost:11434");
-        when(config.getEndpoint()).thenReturn("api/generate");
+        when(config.getModel()).thenReturn("mixtral:8x22b");
+        when(config.getUrl()).thenReturn("http://localhost:4000");
+        when(config.getEndpoint()).thenReturn("v1/chat/completions");
 
-        when(jsonSchemaService.getJsonSchema(any())).thenReturn("{}");
+        when(jsonSchemaService.getJsonSchema(any())).thenReturn("{\"properties\":{}}");
 
-        String errorJson = "{\"error\": \"Model not found\"}";
+        String errorJson = "{\"error\": {\"message\": \"Authentication Error\", \"type\": \"auth_error\", \"code\": 401}}";
+
+        @SuppressWarnings("unchecked")
         HttpResponse<String> mockHttpResponse = mock(HttpResponse.class);
         when(mockHttpResponse.body()).thenReturn(errorJson);
 
@@ -164,22 +183,45 @@ class OllamaClientTest {
     }
 
     @Test
-    void testParseResponseValidJson() {
-        OllamaResponse response = new OllamaResponse();
-        response.setResponse("{\"result\": 42}");
+    void testStartQueryHandlesInvalidContentJson() throws Exception {
+        String templateFileName = "invalid_json.md";
+        doReturn("some prompt").when(ollamaClient).getTemplate(templateFileName);
 
-        Optional<TestResponseDto> result = ollamaClient.parseResponse(response, TestResponseDto.class);
+        when(config.getModel()).thenReturn("mixtral:8x22b");
+        when(config.getUrl()).thenReturn("http://localhost:4000");
+        when(config.getEndpoint()).thenReturn("v1/chat/completions");
 
-        assertThat(result.isPresent(), is(true));
-        assertThat(result.get().result(), is(42));
-    }
+        when(jsonSchemaService.getJsonSchema(any())).thenReturn("{\"properties\":{}}");
 
-    @Test
-    void testParseResponseInvalidJson() {
-        OllamaResponse response = new OllamaResponse();
-        response.setResponse("This is not JSON");
-        Optional<TestResponseDto> result = ollamaClient.parseResponse(response, TestResponseDto.class);
-        assertThat(result.isEmpty(), is(true));
+        // The outer envelope is valid, but the LLM hallucinated broken JSON inside the content string
+        String brokenContentJsonResponse = """
+            {
+              "choices": [
+                {
+                  "message": {
+                    "content": "This is not valid JSON text"
+                  }
+                }
+              ]
+            }
+        """;
+
+        @SuppressWarnings("unchecked")
+        HttpResponse<String> mockHttpResponse = mock(HttpResponse.class);
+        when(mockHttpResponse.body()).thenReturn(brokenContentJsonResponse);
+
+        when(httpClient.send(
+            any(HttpRequest.class),
+            ArgumentMatchers.<HttpResponse.BodyHandler<String>>any()
+        )).thenReturn(mockHttpResponse);
+
+        TestResponseDto fallback = new TestResponseDto(-1);
+
+        TestResponseDto result = ollamaClient.startQuery(
+            TestResponseDto.class, templateFileName, Map.of(), fallback
+        );
+
+        assertThat(result, sameInstance(fallback));
     }
 
     record TestResponseDto(int result) {}
