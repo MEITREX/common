@@ -203,6 +203,8 @@ public class OllamaClient {
 
         HttpResponse<String> response = client.send(req, HttpResponse.BodyHandlers.ofString());
 
+        log.info("RAW OLLAMA HTTP RESPONSE BODY: {}", response.body());
+
         OllamaResponse result = jsonMapper.readValue(response.body(), OllamaResponse.class);
 
         if (result.getError() != null) {
