@@ -75,15 +75,12 @@ class OllamaClientTest {
 
         String mockSchema = "{\"type\":\"object\", \"properties\":{\"result\":{\"type\":\"integer\"}}}";
 
-        String liteLlmJsonResponse = """
+        String ollamaJsonResponse = """
             {
-              "choices": [
-                {
-                  "message": {
-                    "content": "{\\"result\\": 2}"
-                  }
-                }
-              ]
+              "model": "mixtral:8x22b",
+              "response": "{\\"result\\": 2}",
+              "done": true,
+              "done_reason": "stop"
             }
         """;
 
@@ -98,7 +95,7 @@ class OllamaClientTest {
 
         @SuppressWarnings("unchecked")
         HttpResponse<String> mockHttpResponse = mock(HttpResponse.class);
-        when(mockHttpResponse.body()).thenReturn(liteLlmJsonResponse);
+        when(mockHttpResponse.body()).thenReturn(ollamaJsonResponse);
 
         when(httpClient.send(
             any(HttpRequest.class),
@@ -152,7 +149,7 @@ class OllamaClientTest {
     }
 
     @Test
-    void testStartQueryHandlesLiteLlmError() throws Exception {
+    void testStartQueryHandlesOllamaError() throws Exception {
         String templateFileName = "api_error.md";
         doReturn("some prompt").when(ollamaClient).getTemplate(templateFileName);
 
@@ -162,7 +159,7 @@ class OllamaClientTest {
 
         when(jsonSchemaService.getJsonSchema(any())).thenReturn("{\"properties\":{}}");
 
-        String errorJson = "{\"error\": {\"message\": \"Authentication Error\", \"type\": \"auth_error\", \"code\": 401}}";
+        String errorJson = "{\"error\": \"Authentication Error\"}";
 
         @SuppressWarnings("unchecked")
         HttpResponse<String> mockHttpResponse = mock(HttpResponse.class);
@@ -196,13 +193,10 @@ class OllamaClientTest {
         // The outer envelope is valid, but the LLM hallucinated broken JSON inside the content string
         String brokenContentJsonResponse = """
             {
-              "choices": [
-                {
-                  "message": {
-                    "content": "This is not valid JSON text"
-                  }
-                }
-              ]
+              "model": "mixtral:8x22b",
+              "response": "This is not valid JSON text",
+              "done": true,
+              "done_reason": "stop"
             }
         """;
 

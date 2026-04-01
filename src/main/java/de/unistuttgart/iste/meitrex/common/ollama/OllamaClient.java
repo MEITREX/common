@@ -9,14 +9,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -111,7 +117,7 @@ public class OllamaClient {
 
     /**
      * Executes a full LLM query cycle: loads a template from resources, fills it with arguments,
-     * requests a structured response from the LLM proxy, and parses the result.
+     * requests a structured response from Ollama, and parses the result.
      *
      * @param <ResponseType> the target type for the structured JSON response
      * @param responseType   the class of the target type to parse the response into
@@ -122,21 +128,48 @@ public class OllamaClient {
      * If null/blank, the default from {@link OllamaConfig} is used.
      * @return the parsed response object of type ResponseType, or the provided error fallback
      */
-    public <ResponseType> ResponseType startQuery(Class<ResponseType> responseType, String templateFileName, Map<String, String> argMap, ResponseType error, @Nullable String modelOverride) {
+    public <ResponseType> ResponseType startQuery(
+            final Class<ResponseType> responseType,
+            final String templateFileName,
+            final Map<String, String> argMap,
+            final ResponseType error,
+            @Nullable final String modelOverride) {
         try {
             final String promptTemplate = getTemplate(templateFileName);
             final String filledPrompt = fillTemplate(promptTemplate, argMap);
 
-            final Map<String, Object> schemaObject = buildStrictSchema(responseType);
-            final String modelToUse = (modelOverride != null && !modelOverride.isBlank()) ? modelOverride : this.config.getModel();
+            final TypeReference<HashMap<String, Object>> typeRef = new TypeReference<>() {};
+            final String jsonSchema = jsonSchemaService.getJsonSchema(responseType);
+            final Map<String, Object> schemaObject = jsonMapper.readValue(jsonSchema, typeRef);
 
-            OllamaRequest request = new OllamaRequest(modelToUse, filledPrompt, false, schemaObject);
-            OllamaResponse ollamaResponse = queryLLM(request);
+            if (schemaObject.get("properties") instanceof Map<?, ?> properties) {
+                schemaObject.put("required", properties.keySet());
+            }
 
-            return parseContent(ollamaResponse, responseType, error);
+            // Determine which model to use: override or default config
+            final String modelToUse = (modelOverride != null && !modelOverride.isBlank())
+                    ? modelOverride
+                    : this.config.getModel();
 
-        } catch (Exception e) {
-            log.error("Query orchestration failed", e);
+            log.info("Starting LLM query. Model: {}", modelToUse);
+
+            OllamaRequest request = new OllamaRequest(
+                    modelToUse,
+                    filledPrompt,
+                    false,
+                    schemaObject
+            );
+
+            final OllamaResponse response = queryLLM(request);
+            final Optional<ResponseType> parsedResponse = parseResponse(response, responseType);
+
+            return parsedResponse.orElse(error);
+        } catch (IOException | RuntimeException exception) {
+            log.error("Error while starting query: {}", exception.getMessage(), exception);
+            return error;
+        } catch (InterruptedException e) {
+            log.error("Query interrupted: {}", e.getMessage(), e);
+            Thread.currentThread().interrupt();
             return error;
         }
     }
@@ -160,81 +193,61 @@ public class OllamaClient {
     }
 
     /**
-     * Generates a JSON schema for the target class and enforces that all properties are strictly required.
-     * This prevents the LLM from omitting necessary fields.
-     *
-     * @param responseType the class to generate the schema for
-     * @return a map representing the strict JSON schema
-     * @throws Exception if schema generation or mapping fails
-     */
-    private Map<String, Object> buildStrictSchema(Class<?> responseType) throws Exception {
-        final String jsonSchema = jsonSchemaService.getJsonSchema(responseType);
-        Map<String, Object> schemaObject = jsonMapper.readValue(jsonSchema, new TypeReference<HashMap<String, Object>>() {});
-
-        if (schemaObject.get("properties") instanceof Map<?, ?> properties) {
-            schemaObject.put("required", properties.keySet());
-        }
-        return schemaObject;
-    }
-
-    /**
-     * Sends the given request to the LLM endpoint (via LiteLLM proxy) and returns the raw response.
+     * Sends the given request to the Ollama LLM endpoint and returns the raw response.
      *
      * @param request the request payload
      * @return the response from Ollama
      * @throws IOException if the request or response handling fails
      * @throws InterruptedException if the HTTP call is interrupted
      */
-    private OllamaResponse queryLLM(OllamaRequest request) throws IOException, InterruptedException {
-        final String jsonRequest = jsonMapper.writeValueAsString(request);
-        final String fullUrl = this.config.getUrl() + "/" + this.config.getEndpoint();
+    private OllamaResponse queryLLM(final OllamaRequest request) throws IOException, InterruptedException {
+        final String json = jsonMapper.writeValueAsString(request);
 
-        HttpRequest.Builder reqBuilder = HttpRequest.newBuilder()
-                .uri(URI.create(fullUrl))
+        final HttpRequest.Builder reqBuilder = HttpRequest.newBuilder()
+                .uri(URI.create(this.config.getUrl() + "/" + this.config.getEndpoint()))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(jsonRequest));
+                .timeout(Duration.ofMinutes(3))
+                .POST(HttpRequest.BodyPublishers.ofString(json));
 
         if (this.config.getApiKey() != null && !this.config.getApiKey().isBlank()) {
             reqBuilder.header("Authorization", "Bearer " + this.config.getApiKey());
-        } else {
-            log.warn("LiteLLM API key is missing. Request might fail with 401 Unauthorized.");
         }
 
-        HttpResponse<String> response = client.send(reqBuilder.build(), HttpResponse.BodyHandlers.ofString());
-        return jsonMapper.readValue(response.body(), OllamaResponse.class);
+        final HttpResponse<String> response = client.send(reqBuilder.build(), HttpResponse.BodyHandlers.ofString());
+
+        log.info("RAW OLLAMA HTTP RESPONSE BODY: {}", response.body());
+
+        final OllamaResponse result = jsonMapper.readValue(response.body(), OllamaResponse.class);
+
+        if (result.getError() != null) {
+            throw new RuntimeException("Ollama returned error: " + result.getError());
+        }
+
+        return result;
     }
 
     /**
-     * Parses the inner content string of an LLM response into a specific Java type.
-     * It expects the generated content to be valid JSON.
-     * If it fails to parse the response, encounters an API error, or the content is missing,
-     * it safely returns the provided fallback error object.
+     * parse an ollama response to a specify type. It expects the response to be a valid json
+     * If it fails to parse the response, it returns an empty optional
      *
-     * @param <ResponseType> the target Java type to cast the JSON to
-     * @param ollamaResponse the response wrapper returned from the LLM server
-     * @param responseType   the class definition of the target type
-     * @param error          the fallback object to return in case of failure
-     * @return the successfully parsed object, or the fallback error value
+     * @param ollamaResponse the response from the ollama server
+     * @param responseType the type to parse the response to
+     * @return an optional of the parsed response
+     * @param <ResponseType> the type to cast to
      */
-    private <ResponseType> ResponseType parseContent(OllamaResponse ollamaResponse, Class<ResponseType> responseType, ResponseType error) {
-        if (ollamaResponse == null) return error;
-
-        if (ollamaResponse.error() != null) {
-            log.error("LiteLLM API Error: {}", ollamaResponse.error());
-            return error;
+    public <ResponseType> Optional<ResponseType> parseResponse(
+            final OllamaResponse ollamaResponse,
+            final Class<ResponseType> responseType) {
+        final String response = ollamaResponse.getResponse();
+        if (responseType == null || response == null) {
+            log.info("Response is null or empty: {}", response);
+            return Optional.empty();
         }
-
-        String content = ollamaResponse.getContent();
-        if (content == null || content.isBlank()) {
-            log.error("Response content was null or empty.");
-            return error;
-        }
-
         try {
-            return jsonMapper.readValue(content, responseType);
-        } catch (Exception e) {
-            log.error("Failed to map JSON content to target class {}", responseType.getSimpleName(), e);
-            return error;
+            return Optional.of(jsonMapper.readValue(response, responseType));
+        } catch (IOException e) {
+            log.error("Failed to parse response: {}", response, e);
+            return Optional.empty();
         }
     }
 
