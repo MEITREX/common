@@ -206,7 +206,7 @@ public class OllamaClient {
         final HttpRequest.Builder reqBuilder = HttpRequest.newBuilder()
                 .uri(URI.create(this.config.getUrl() + "/" + this.config.getEndpoint()))
                 .header("Content-Type", "application/json")
-                .timeout(Duration.ofMinutes(3))
+                .timeout(Duration.ofMinutes(10))
                 .POST(HttpRequest.BodyPublishers.ofString(json));
 
         if (this.config.getApiKey() != null && !this.config.getApiKey().isBlank()) {
