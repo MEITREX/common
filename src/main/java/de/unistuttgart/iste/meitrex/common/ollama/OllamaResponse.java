@@ -10,35 +10,33 @@ import lombok.Setter;
 public class OllamaResponse {
 
     @JsonProperty("total_duration")
-    long totalDuration;
+    private long totalDuration;
     @JsonProperty("load_duration")
-    long loadDuration;
+    private long loadDuration;
     @JsonProperty("prompt_eval_count")
-    long promptEvalCount;
+    private long promptEvalCount;
     @JsonProperty("prompt_eval_duration")
-    long promptEvalDuration;
+    private long promptEvalDuration;
     @JsonProperty("eval_count")
-    long evalCount;
+    private long evalCount;
     @JsonProperty("eval_duration")
-    long evalDuration;
+    private long evalDuration;
     @JsonProperty("model")
-    String model;
+    private String model;
     @JsonProperty("created_at")
-    String createdAt;
+    private String createdAt;
     @JsonProperty("response")
-    String response;
+    private String response;
     @JsonProperty("done")
-    boolean done;
+    private boolean done;
     @JsonProperty("done_reason")
-    String doneReason;
+    private String doneReason;
     @JsonProperty("context")
-    long[] context;
+    private long[] context;
     @JsonProperty("error")
-    String error;
-
+    private String error;
 
     /**
-     *
      * @return The total duration of the request in milliseconds.
      */
     @JsonIgnore
@@ -47,7 +45,6 @@ public class OllamaResponse {
     }
 
     /**
-     *
      * @return The duration of the model loading in milliseconds.
      */
     @JsonIgnore
@@ -56,7 +53,6 @@ public class OllamaResponse {
     }
 
     /**
-     *
      * @return The number of prompt evaluations.
      */
     @JsonIgnore
@@ -65,7 +61,6 @@ public class OllamaResponse {
     }
 
     /**
-     *
      * @return The duration of the prompt evaluation in milliseconds.
      */
     @JsonIgnore
@@ -74,7 +69,6 @@ public class OllamaResponse {
     }
 
     /**
-     *
      * @return The number of evaluations.
      */
     @JsonIgnore
@@ -83,7 +77,6 @@ public class OllamaResponse {
     }
 
     /**
-     *
      * @return The duration of the evaluation in milliseconds.
      */
     @JsonIgnore
@@ -92,7 +85,6 @@ public class OllamaResponse {
     }
 
     /**
-     *
      * @return The model used for the request.
      */
     @JsonIgnore
@@ -101,7 +93,6 @@ public class OllamaResponse {
     }
 
     /**
-     *
      * @return The creation time of the request in ISO 8601 format.
      */
     @JsonIgnore
@@ -110,7 +101,6 @@ public class OllamaResponse {
     }
 
     /**
-     *
      * @return The response from the model.
      */
     @JsonIgnore
@@ -119,7 +109,6 @@ public class OllamaResponse {
     }
 
     /**
-     *
      * @return Whether the request is done or not.
      */
     @JsonIgnore
@@ -127,9 +116,7 @@ public class OllamaResponse {
         return done;
     }
 
-
     /**
-     *
      * @return The reason why the request is done.
      */
     @JsonIgnore
@@ -138,7 +125,6 @@ public class OllamaResponse {
     }
 
     /**
-     *
      * @return The context of the request.
      */
     @JsonIgnore
@@ -147,5 +133,7 @@ public class OllamaResponse {
     }
 
     @JsonIgnore
-    public String getError() {return error;}
+    public String getError() {
+        return error;
+    }
 }

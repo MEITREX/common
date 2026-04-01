@@ -9,12 +9,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -98,7 +103,7 @@ public class OllamaClient {
         while (matcher.find()) {
             final String fullPlaceholder = matcher.group();
 
-            final String key = fullPlaceholder.substring(2, fullPlaceholder.length() - 2);
+            final String key = fullPlaceholder.substring(2, fullPlaceholder.length() - 2).trim();
             final String value = args.get(key);
 
             if (value != null) {
@@ -131,12 +136,15 @@ public class OllamaClient {
             @Nullable final String modelOverride) {
         try {
             final String promptTemplate = getTemplate(templateFileName);
-
             final String filledPrompt = fillTemplate(promptTemplate, argMap);
 
             final TypeReference<HashMap<String, Object>> typeRef = new TypeReference<>() {};
             final String jsonSchema = jsonSchemaService.getJsonSchema(responseType);
             final Map<String, Object> schemaObject = jsonMapper.readValue(jsonSchema, typeRef);
+
+            if (schemaObject.get("properties") instanceof Map<?, ?> properties) {
+                schemaObject.put("required", properties.keySet());
+            }
 
             // Determine which model to use: override or default config
             final String modelToUse = (modelOverride != null && !modelOverride.isBlank())
@@ -192,18 +200,24 @@ public class OllamaClient {
      * @throws IOException if the request or response handling fails
      * @throws InterruptedException if the HTTP call is interrupted
      */
-    private OllamaResponse queryLLM(OllamaRequest request) throws IOException, InterruptedException {
+    private OllamaResponse queryLLM(final OllamaRequest request) throws IOException, InterruptedException {
         final String json = jsonMapper.writeValueAsString(request);
 
-        HttpRequest req = HttpRequest.newBuilder()
+        final HttpRequest.Builder reqBuilder = HttpRequest.newBuilder()
                 .uri(URI.create(this.config.getUrl() + "/" + this.config.getEndpoint()))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .build();
+                .timeout(Duration.ofMinutes(10))
+                .POST(HttpRequest.BodyPublishers.ofString(json));
 
-        HttpResponse<String> response = client.send(req, HttpResponse.BodyHandlers.ofString());
+        if (this.config.getApiKey() != null && !this.config.getApiKey().isBlank()) {
+            reqBuilder.header("Authorization", "Bearer " + this.config.getApiKey());
+        }
 
-        OllamaResponse result = jsonMapper.readValue(response.body(), OllamaResponse.class);
+        final HttpResponse<String> response = client.send(reqBuilder.build(), HttpResponse.BodyHandlers.ofString());
+
+        log.info("RAW OLLAMA HTTP RESPONSE BODY: {}", response.body());
+
+        final OllamaResponse result = jsonMapper.readValue(response.body(), OllamaResponse.class);
 
         if (result.getError() != null) {
             throw new RuntimeException("Ollama returned error: " + result.getError());
@@ -221,9 +235,11 @@ public class OllamaClient {
      * @return an optional of the parsed response
      * @param <ResponseType> the type to cast to
      */
-    public <ResponseType> Optional<ResponseType> parseResponse(OllamaResponse ollamaResponse, Class<ResponseType> responseType) {
+    public <ResponseType> Optional<ResponseType> parseResponse(
+            final OllamaResponse ollamaResponse,
+            final Class<ResponseType> responseType) {
         final String response = ollamaResponse.getResponse();
-        if(responseType == null || response == null) {
+        if (responseType == null || response == null) {
             log.info("Response is null or empty: {}", response);
             return Optional.empty();
         }
