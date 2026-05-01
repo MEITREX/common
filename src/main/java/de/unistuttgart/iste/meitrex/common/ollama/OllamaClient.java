@@ -21,6 +21,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -151,13 +152,22 @@ public class OllamaClient {
                     ? modelOverride
                     : this.config.getModel();
 
+            Map<String, Object> responseFormat = Map.of(
+                "type", "json_schema",
+                "json_schema", Map.of(
+                    "name", "structured_output",
+                    "schema", schemaObject,
+                    "strict", true
+                )
+            );
+
             log.info("Starting LLM query. Model: {}", modelToUse);
 
             OllamaRequest request = new OllamaRequest(
-                    modelToUse,
-                    filledPrompt,
-                    false,
-                    schemaObject
+                modelToUse,
+                List.of(new OllamaRequest.Message("user", filledPrompt)),
+                0.0,
+                responseFormat
             );
 
             final OllamaResponse response = queryLLM(request);
@@ -215,12 +225,13 @@ public class OllamaClient {
 
         final HttpResponse<String> response = client.send(reqBuilder.build(), HttpResponse.BodyHandlers.ofString());
 
-        log.info("RAW OLLAMA HTTP RESPONSE BODY: {}", response.body());
+        log.debug("RAW OLLAMA HTTP RESPONSE BODY: {}", response.body());
 
         final OllamaResponse result = jsonMapper.readValue(response.body(), OllamaResponse.class);
 
-        if (result.getError() != null) {
-            throw new RuntimeException("Ollama returned error: " + result.getError());
+        if (response.statusCode() >= 400 || result.getErrorMessage() != null) {
+            throw new RuntimeException("LLM returned error: " +
+                    (result.getErrorMessage() != null ? result.getErrorMessage() : response.body()));
         }
 
         return result;

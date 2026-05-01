@@ -78,9 +78,14 @@ class OllamaClientTest {
         String ollamaJsonResponse = """
             {
               "model": "mixtral:8x22b",
-              "response": "{\\"result\\": 2}",
-              "done": true,
-              "done_reason": "stop"
+              "choices": [
+                {
+                  "message": {
+                    "role": "assistant",
+                    "content": "{\\"result\\": 2}"
+                  }
+                }
+              ]
             }
         """;
 
@@ -159,7 +164,14 @@ class OllamaClientTest {
 
         when(jsonSchemaService.getJsonSchema(any())).thenReturn("{\"properties\":{}}");
 
-        String errorJson = "{\"error\": \"Authentication Error\"}";
+        String errorJson = """
+            {
+              "error": {
+                "message": "Authentication Error",
+                "type": "invalid_request_error"
+              }
+            }
+        """;
 
         @SuppressWarnings("unchecked")
         HttpResponse<String> mockHttpResponse = mock(HttpResponse.class);
@@ -194,9 +206,14 @@ class OllamaClientTest {
         String brokenContentJsonResponse = """
             {
               "model": "mixtral:8x22b",
-              "response": "This is not valid JSON text",
-              "done": true,
-              "done_reason": "stop"
+              "choices": [
+                {
+                  "message": {
+                    "role": "assistant",
+                    "content": "This is not valid JSON text"
+                  }
+                }
+              ]
             }
         """;
 
